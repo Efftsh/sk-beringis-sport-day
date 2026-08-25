@@ -16,14 +16,15 @@ export default await Env.create(new URL('../', import.meta.url), {
   NODE_ENV: Env.schema.enum(['development', 'production', 'test'] as const),
   PORT: Env.schema.number(),
   HOST: Env.schema.string({ format: 'host' }),
-  LOG_LEVEL: Env.schema.string(),
+  LOG_LEVEL: Env.schema.string.optional(),
 
   // App
   APP_KEY: Env.schema.secret(),
-  APP_URL: Env.schema.string({ format: 'url', tld: false }),
+  APP_URL: Env.schema.string.optional(),
+  APP_NAME: Env.schema.string.optional(),
 
   // Session
-  SESSION_DRIVER: Env.schema.enum(['cookie', 'memory', 'database'] as const),
+  SESSION_DRIVER: Env.schema.enum.optional(['cookie', 'memory', 'database'] as const),
 
   // Database
   DB_CONNECTION: Env.schema.enum.optional(['pg', 'sqlite'] as const),

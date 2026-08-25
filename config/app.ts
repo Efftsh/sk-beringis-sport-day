@@ -7,7 +7,7 @@ import { defineConfig } from '@adonisjs/core/http'
  * URLs to your application. For example, when sending emails, images should
  * use absolute URLs.
  */
-export const appUrl = env.get('APP_URL')
+export const appUrl = env.get('APP_URL', 'http://localhost:3333')
 
 /**
  * The configuration settings used by the HTTP server

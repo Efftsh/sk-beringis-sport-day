@@ -12,6 +12,10 @@ services:
         value: 3333
       - key: HOST
         value: 0.0.0.0
+      - key: LOG_LEVEL
+        value: info
+      - key: SESSION_DRIVER
+        value: cookie
       - key: APP_KEY
         generateValue: true
       - key: DB_CONNECTION
