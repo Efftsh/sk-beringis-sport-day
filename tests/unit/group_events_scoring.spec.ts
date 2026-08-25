@@ -89,21 +89,23 @@ test.group('Group Relay Events & House Scoring Logic (4x50m, 4x100m, 4x200m)', (
     assert.notInclude(individualAthletes, 'Rumah Biru')
   })
 
-  test('confirms 4x200m relay events are exclusively scheduled on Hari 1 (Day 1)', ({ assert }) => {
+  test('confirms 4x100m relay events are scheduled on Hari 1 (Day 1) and 4x50m on Hari 2', ({ assert }) => {
     const scheduledEvents = [
-      { code: 'A29', eventName: '4x200 meter', category: 'Tahun 4 Perempuan', scheduledTime: '08:00 AM (Hari 1)' },
-      { code: 'A30', eventName: '4x200 meter', category: 'Tahun 4 Lelaki', scheduledTime: '08:00 AM (Hari 1)' },
-      { code: 'A31', eventName: '4x200 meter', category: 'Tahun 5 Perempuan', scheduledTime: '08:00 AM (Hari 1)' },
-      { code: 'A32', eventName: '4x200 meter', category: 'Tahun 5 Lelaki', scheduledTime: '08:00 AM (Hari 1)' },
-      { code: 'A33', eventName: '4x200 meter', category: 'Tahun 6 Perempuan', scheduledTime: '08:00 AM (Hari 1)' },
-      { code: 'A34', eventName: '4x200 meter', category: 'Tahun 6 Lelaki', scheduledTime: '08:00 AM (Hari 1)' },
-      { code: 'A41', eventName: '4x50 meter', category: 'Tahun 1 Perempuan', scheduledTime: '07:00 AM (Hari 2)' },
-      { code: 'A45', eventName: '4x100 meter', category: 'Tahun 3 Perempuan', scheduledTime: '07:00 AM (Hari 2)' },
+      { code: 'A27', eventName: '4x100 meter', category: 'Tahun 3 Perempuan', scheduledTime: '09:00 AM (Hari 1)' },
+      { code: 'A28', eventName: '4x100 meter', category: 'Tahun 3 Lelaki', scheduledTime: '09:00 AM (Hari 1)' },
+      { code: 'A29', eventName: '4x100 meter', category: 'Tahun 4 Perempuan', scheduledTime: '09:00 AM (Hari 1)' },
+      { code: 'A30', eventName: '4x100 meter', category: 'Tahun 4 Lelaki', scheduledTime: '09:00 AM (Hari 1)' },
+      { code: 'A31', eventName: '4x100 meter', category: 'Tahun 5 Perempuan', scheduledTime: '09:00 AM (Hari 1)' },
+      { code: 'A32', eventName: '4x100 meter', category: 'Tahun 5 Lelaki', scheduledTime: '09:00 AM (Hari 1)' },
+      { code: 'A33', eventName: '4x100 meter', category: 'Tahun 6 Perempuan', scheduledTime: '09:00 AM (Hari 1)' },
+      { code: 'A34', eventName: '4x100 meter', category: 'Tahun 6 Lelaki', scheduledTime: '09:00 AM (Hari 1)' },
+      { code: 'B23', eventName: '4x50 meter', category: 'Tahun 1 Perempuan', scheduledTime: '08:30 AM (Hari 2)' },
+      { code: 'C01', eventName: '4x200 meter', category: 'Tahun 4 Perempuan', scheduledTime: '07:30 AM (Hari 3)' },
     ]
 
-    const relay200Events = scheduledEvents.filter((e) => e.eventName.includes('4x200'))
-    assert.equal(relay200Events.length, 6)
-    relay200Events.forEach((e) => {
+    const relay100Events = scheduledEvents.filter((e) => e.eventName.includes('4x100'))
+    assert.equal(relay100Events.length, 8)
+    relay100Events.forEach((e) => {
       assert.include(e.scheduledTime, 'Hari 1', `${e.code} (${e.category}) must only be scheduled on Hari 1`)
     })
   })

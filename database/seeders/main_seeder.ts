@@ -94,98 +94,98 @@ export default class extends BaseSeeder {
       { id: 'ev-03', code: 'A03', eventName: '4x50 meter', category: 'Lelaki (6 Tahun)', type: 'track' as const, stage: 'Akhir', status: 'pending' as const, scheduledTime: '07:00 AM (Hari 1)' },
       { id: 'ev-04', code: 'A04', eventName: '4x50 meter', category: 'Perempuan (6 Tahun)', type: 'track' as const, stage: 'Akhir', status: 'pending' as const, scheduledTime: '07:00 AM (Hari 1)' },
 
-      // 7.00 PAGI — Acara Padang: Lompat Jauh (Akhir)
-      { id: 'ev-05', code: 'A05', eventName: 'Lompat Jauh', category: 'Tahun 4 Perempuan', type: 'field' as const, stage: 'Akhir', status: 'pending' as const, scheduledTime: '07:00 AM (Hari 1)' },
-      { id: 'ev-06', code: 'A06', eventName: 'Lompat Jauh', category: 'Tahun 4 Lelaki', type: 'field' as const, stage: 'Akhir', status: 'pending' as const, scheduledTime: '07:00 AM (Hari 1)' },
-      { id: 'ev-07', code: 'A07', eventName: 'Lompat Jauh', category: 'Tahun 6 Perempuan', type: 'field' as const, stage: 'Akhir', status: 'pending' as const, scheduledTime: '07:00 AM (Hari 1)' },
-      { id: 'ev-08', code: 'A08', eventName: 'Lompat Jauh', category: 'Tahun 6 Lelaki', type: 'field' as const, stage: 'Akhir', status: 'pending' as const, scheduledTime: '07:00 AM (Hari 1)' },
-      { id: 'ev-09', code: 'A09', eventName: 'Lompat Jauh', category: 'Tahun 5 Perempuan', type: 'field' as const, stage: 'Akhir', status: 'pending' as const, scheduledTime: '07:00 AM (Hari 1)' },
-      { id: 'ev-10', code: 'A10', eventName: 'Lompat Jauh', category: 'Tahun 5 Lelaki', type: 'field' as const, stage: 'Akhir', status: 'pending' as const, scheduledTime: '07:00 AM (Hari 1)' },
-
-      // 7.00 PAGI — Acara Padang: Lontar Peluru (Akhir)
-      { id: 'ev-11', code: 'A11', eventName: 'Lontar Peluru', category: 'Tahun 6 Perempuan', type: 'field' as const, stage: 'Akhir', status: 'pending' as const, scheduledTime: '07:00 AM (Hari 1)' },
-      { id: 'ev-12', code: 'A12', eventName: 'Lontar Peluru', category: 'Tahun 6 Lelaki', type: 'field' as const, stage: 'Akhir', status: 'pending' as const, scheduledTime: '07:00 AM (Hari 1)' },
-      { id: 'ev-13', code: 'A13', eventName: 'Lontar Peluru', category: 'Tahun 5 Perempuan', type: 'field' as const, stage: 'Akhir', status: 'pending' as const, scheduledTime: '07:00 AM (Hari 1)' },
-      { id: 'ev-14', code: 'A14', eventName: 'Lontar Peluru', category: 'Tahun 5 Lelaki', type: 'field' as const, stage: 'Akhir', status: 'pending' as const, scheduledTime: '07:00 AM (Hari 1)' },
-      { id: 'ev-15', code: 'A15', eventName: 'Lontar Peluru', category: 'Tahun 4 Perempuan', type: 'field' as const, stage: 'Akhir', status: 'pending' as const, scheduledTime: '07:00 AM (Hari 1)' },
-      { id: 'ev-16', code: 'A16', eventName: 'Lontar Peluru', category: 'Tahun 4 Lelaki', type: 'field' as const, stage: 'Akhir', status: 'pending' as const, scheduledTime: '07:00 AM (Hari 1)' },
-
-      // 7.00 PAGI — Acara Padang: Lompat Tinggi (Akhir)
-      { id: 'ev-17', code: 'A17', eventName: 'Lompat Tinggi', category: 'Tahun 5 Perempuan', type: 'field' as const, stage: 'Akhir', status: 'pending' as const, scheduledTime: '07:00 AM (Hari 1)' },
-      { id: 'ev-18', code: 'A18', eventName: 'Lompat Tinggi', category: 'Tahun 5 Lelaki', type: 'field' as const, stage: 'Akhir', status: 'pending' as const, scheduledTime: '07:00 AM (Hari 1)' },
-      { id: 'ev-19', code: 'A19', eventName: 'Lompat Tinggi', category: 'Tahun 4 Perempuan', type: 'field' as const, stage: 'Akhir', status: 'pending' as const, scheduledTime: '07:00 AM (Hari 1)' },
-      { id: 'ev-20', code: 'A20', eventName: 'Lompat Tinggi', category: 'Tahun 4 Lelaki', type: 'field' as const, stage: 'Akhir', status: 'pending' as const, scheduledTime: '07:00 AM (Hari 1)' },
-      { id: 'ev-21', code: 'A21', eventName: 'Lompat Tinggi', category: 'Tahun 6 Perempuan', type: 'field' as const, stage: 'Akhir', status: 'pending' as const, scheduledTime: '07:00 AM (Hari 1)' },
-      { id: 'ev-22', code: 'A22', eventName: 'Lompat Tinggi', category: 'Tahun 6 Lelaki', type: 'field' as const, stage: 'Akhir', status: 'pending' as const, scheduledTime: '07:00 AM (Hari 1)' },
+      // 7.30 PAGI — Acara Padang: Lompat Jauh (Tahun 3 & 4) & Lompat Tinggi (Tahun 4, 5, 6)
+      { id: 'ev-05', code: 'A05', eventName: 'Lompat Jauh', category: 'Tahun 3 Perempuan', type: 'field' as const, stage: 'Akhir', status: 'pending' as const, scheduledTime: '07:30 AM (Hari 1)' },
+      { id: 'ev-06', code: 'A06', eventName: 'Lompat Jauh', category: 'Tahun 3 Lelaki', type: 'field' as const, stage: 'Akhir', status: 'pending' as const, scheduledTime: '07:30 AM (Hari 1)' },
+      { id: 'ev-07', code: 'A07', eventName: 'Lompat Jauh', category: 'Tahun 4 Perempuan', type: 'field' as const, stage: 'Akhir', status: 'pending' as const, scheduledTime: '07:30 AM (Hari 1)' },
+      { id: 'ev-08', code: 'A08', eventName: 'Lompat Jauh', category: 'Tahun 4 Lelaki', type: 'field' as const, stage: 'Akhir', status: 'pending' as const, scheduledTime: '07:30 AM (Hari 1)' },
+      { id: 'ev-09', code: 'A09', eventName: 'Lompat Tinggi', category: 'Tahun 5 Perempuan', type: 'field' as const, stage: 'Akhir', status: 'pending' as const, scheduledTime: '07:30 AM (Hari 1)' },
+      { id: 'ev-10', code: 'A10', eventName: 'Lompat Tinggi', category: 'Tahun 5 Lelaki', type: 'field' as const, stage: 'Akhir', status: 'pending' as const, scheduledTime: '07:30 AM (Hari 1)' },
+      { id: 'ev-11', code: 'A11', eventName: 'Lompat Tinggi', category: 'Tahun 4 Perempuan', type: 'field' as const, stage: 'Akhir', status: 'pending' as const, scheduledTime: '07:30 AM (Hari 1)' },
+      { id: 'ev-12', code: 'A12', eventName: 'Lompat Tinggi', category: 'Tahun 4 Lelaki', type: 'field' as const, stage: 'Akhir', status: 'pending' as const, scheduledTime: '07:30 AM (Hari 1)' },
+      { id: 'ev-13', code: 'A13', eventName: 'Lompat Tinggi', category: 'Tahun 6 Perempuan', type: 'field' as const, stage: 'Akhir', status: 'pending' as const, scheduledTime: '07:30 AM (Hari 1)' },
+      { id: 'ev-14', code: 'A14', eventName: 'Lompat Tinggi', category: 'Tahun 6 Lelaki', type: 'field' as const, stage: 'Akhir', status: 'pending' as const, scheduledTime: '07:30 AM (Hari 1)' },
 
       // 8.00 PAGI — Balapan: 200 Meter (Saringan)
-      { id: 'ev-23', code: 'A23', eventName: '200 meter', category: 'Tahun 4 Perempuan', type: 'track' as const, stage: 'Saringan', status: 'pending' as const, scheduledTime: '08:00 AM (Hari 1)' },
-      { id: 'ev-24', code: 'A24', eventName: '200 meter', category: 'Tahun 4 Lelaki', type: 'track' as const, stage: 'Saringan', status: 'pending' as const, scheduledTime: '08:00 AM (Hari 1)' },
-      { id: 'ev-25', code: 'A25', eventName: '200 meter', category: 'Tahun 5 Perempuan', type: 'track' as const, stage: 'Saringan', status: 'pending' as const, scheduledTime: '08:00 AM (Hari 1)' },
-      { id: 'ev-26', code: 'A26', eventName: '200 meter', category: 'Tahun 5 Lelaki', type: 'track' as const, stage: 'Saringan', status: 'pending' as const, scheduledTime: '08:00 AM (Hari 1)' },
-      { id: 'ev-27', code: 'A27', eventName: '200 meter', category: 'Tahun 6 Perempuan', type: 'track' as const, stage: 'Saringan', status: 'pending' as const, scheduledTime: '08:00 AM (Hari 1)' },
-      { id: 'ev-28', code: 'A28', eventName: '200 meter', category: 'Tahun 6 Lelaki', type: 'track' as const, stage: 'Saringan', status: 'pending' as const, scheduledTime: '08:00 AM (Hari 1)' },
+      { id: 'ev-15', code: 'A15', eventName: '200 meter', category: 'Tahun 4 Perempuan', type: 'track' as const, stage: 'Saringan', status: 'pending' as const, scheduledTime: '08:00 AM (Hari 1)' },
+      { id: 'ev-16', code: 'A16', eventName: '200 meter', category: 'Tahun 4 Lelaki', type: 'track' as const, stage: 'Saringan', status: 'pending' as const, scheduledTime: '08:00 AM (Hari 1)' },
+      { id: 'ev-17', code: 'A17', eventName: '200 meter', category: 'Tahun 5 Perempuan', type: 'track' as const, stage: 'Saringan', status: 'pending' as const, scheduledTime: '08:00 AM (Hari 1)' },
+      { id: 'ev-18', code: 'A18', eventName: '200 meter', category: 'Tahun 5 Lelaki', type: 'track' as const, stage: 'Saringan', status: 'pending' as const, scheduledTime: '08:00 AM (Hari 1)' },
+      { id: 'ev-19', code: 'A19', eventName: '200 meter', category: 'Tahun 6 Perempuan', type: 'track' as const, stage: 'Saringan', status: 'pending' as const, scheduledTime: '08:00 AM (Hari 1)' },
+      { id: 'ev-20', code: 'A20', eventName: '200 meter', category: 'Tahun 6 Lelaki', type: 'track' as const, stage: 'Saringan', status: 'pending' as const, scheduledTime: '08:00 AM (Hari 1)' },
 
-      // 8.00 PAGI — Balapan: 4 x 200 Meter (Akhir)
-      { id: 'ev-29', code: 'A29', eventName: '4x200 meter', category: 'Tahun 4 Perempuan', type: 'track' as const, stage: 'Akhir', status: 'pending' as const, scheduledTime: '08:00 AM (Hari 1)' },
-      { id: 'ev-30', code: 'A30', eventName: '4x200 meter', category: 'Tahun 4 Lelaki', type: 'track' as const, stage: 'Akhir', status: 'pending' as const, scheduledTime: '08:00 AM (Hari 1)' },
-      { id: 'ev-31', code: 'A31', eventName: '4x200 meter', category: 'Tahun 5 Perempuan', type: 'track' as const, stage: 'Akhir', status: 'pending' as const, scheduledTime: '08:00 AM (Hari 1)' },
-      { id: 'ev-32', code: 'A32', eventName: '4x200 meter', category: 'Tahun 5 Lelaki', type: 'track' as const, stage: 'Akhir', status: 'pending' as const, scheduledTime: '08:00 AM (Hari 1)' },
-      { id: 'ev-33', code: 'A33', eventName: '4x200 meter', category: 'Tahun 6 Perempuan', type: 'track' as const, stage: 'Akhir', status: 'pending' as const, scheduledTime: '08:00 AM (Hari 1)' },
-      { id: 'ev-34', code: 'A34', eventName: '4x200 meter', category: 'Tahun 6 Lelaki', type: 'track' as const, stage: 'Akhir', status: 'pending' as const, scheduledTime: '08:00 AM (Hari 1)' },
+      // 8.00 PAGI — Balapan: 200 Meter (Akhir)
+      { id: 'ev-21', code: 'A21', eventName: '200 meter', category: 'Tahun 4 Perempuan', type: 'track' as const, stage: 'Akhir', status: 'pending' as const, scheduledTime: '08:30 AM (Hari 1)' },
+      { id: 'ev-22', code: 'A22', eventName: '200 meter', category: 'Tahun 4 Lelaki', type: 'track' as const, stage: 'Akhir', status: 'pending' as const, scheduledTime: '08:30 AM (Hari 1)' },
+      { id: 'ev-23', code: 'A23', eventName: '200 meter', category: 'Tahun 5 Perempuan', type: 'track' as const, stage: 'Akhir', status: 'pending' as const, scheduledTime: '08:30 AM (Hari 1)' },
+      { id: 'ev-24', code: 'A24', eventName: '200 meter', category: 'Tahun 5 Lelaki', type: 'track' as const, stage: 'Akhir', status: 'pending' as const, scheduledTime: '08:30 AM (Hari 1)' },
+      { id: 'ev-25', code: 'A25', eventName: '200 meter', category: 'Tahun 6 Perempuan', type: 'track' as const, stage: 'Akhir', status: 'pending' as const, scheduledTime: '08:30 AM (Hari 1)' },
+      { id: 'ev-26', code: 'A26', eventName: '200 meter', category: 'Tahun 6 Lelaki', type: 'track' as const, stage: 'Akhir', status: 'pending' as const, scheduledTime: '08:30 AM (Hari 1)' },
 
-      // ==========================================
-      // 📅 HARI 2 — KHAMIS, 27 OGOS 2026 (7:00 AM)
-      // Padang SK Beringis (18 Acara Rasmi)
-      // ==========================================
-
-      // 7.00 PAGI — 200m Akhir (Tahun 4, 5, 6)
-      { id: 'ev-35', code: 'A35', eventName: '200 meter', category: 'Tahun 4 Perempuan', type: 'track' as const, stage: 'Akhir', status: 'pending' as const, scheduledTime: '07:00 AM (Hari 2)' },
-      { id: 'ev-36', code: 'A36', eventName: '200 meter', category: 'Tahun 4 Lelaki', type: 'track' as const, stage: 'Akhir', status: 'pending' as const, scheduledTime: '07:00 AM (Hari 2)' },
-      { id: 'ev-37', code: 'A37', eventName: '200 meter', category: 'Tahun 5 Perempuan', type: 'track' as const, stage: 'Akhir', status: 'pending' as const, scheduledTime: '07:00 AM (Hari 2)' },
-      { id: 'ev-38', code: 'A38', eventName: '200 meter', category: 'Tahun 5 Lelaki', type: 'track' as const, stage: 'Akhir', status: 'pending' as const, scheduledTime: '07:00 AM (Hari 2)' },
-      { id: 'ev-39', code: 'A39', eventName: '200 meter', category: 'Tahun 6 Perempuan', type: 'track' as const, stage: 'Akhir', status: 'pending' as const, scheduledTime: '07:00 AM (Hari 2)' },
-      { id: 'ev-40', code: 'A40', eventName: '200 meter', category: 'Tahun 6 Lelaki', type: 'track' as const, stage: 'Akhir', status: 'pending' as const, scheduledTime: '07:00 AM (Hari 2)' },
-
-      // 7.00 PAGI — 4 x 50m Akhir (Tahun 1 & 2)
-      { id: 'ev-41', code: 'A41', eventName: '4x50 meter', category: 'Tahun 1 Perempuan', type: 'track' as const, stage: 'Akhir', status: 'pending' as const, scheduledTime: '07:00 AM (Hari 2)' },
-      { id: 'ev-42', code: 'A42', eventName: '4x50 meter', category: 'Tahun 1 Lelaki', type: 'track' as const, stage: 'Akhir', status: 'pending' as const, scheduledTime: '07:00 AM (Hari 2)' },
-      { id: 'ev-43', code: 'A43', eventName: '4x50 meter', category: 'Tahun 2 Perempuan', type: 'track' as const, stage: 'Akhir', status: 'pending' as const, scheduledTime: '07:00 AM (Hari 2)' },
-      { id: 'ev-44', code: 'A44', eventName: '4x50 meter', category: 'Tahun 2 Lelaki', type: 'track' as const, stage: 'Akhir', status: 'pending' as const, scheduledTime: '07:00 AM (Hari 2)' },
-
-      // 7.00 PAGI — 4 x 100m Akhir (Tahun 3 hingga 6)
-      { id: 'ev-45', code: 'A45', eventName: '4x100 meter', category: 'Tahun 3 Perempuan', type: 'track' as const, stage: 'Akhir', status: 'pending' as const, scheduledTime: '07:00 AM (Hari 2)' },
-      { id: 'ev-46', code: 'A46', eventName: '4x100 meter', category: 'Tahun 3 Lelaki', type: 'track' as const, stage: 'Akhir', status: 'pending' as const, scheduledTime: '07:00 AM (Hari 2)' },
-      { id: 'ev-47', code: 'A47', eventName: '4x100 meter', category: 'Tahun 4 Perempuan', type: 'track' as const, stage: 'Akhir', status: 'pending' as const, scheduledTime: '07:00 AM (Hari 2)' },
-      { id: 'ev-48', code: 'A48', eventName: '4x100 meter', category: 'Tahun 4 Lelaki', type: 'track' as const, stage: 'Akhir', status: 'pending' as const, scheduledTime: '07:00 AM (Hari 2)' },
-      { id: 'ev-49', code: 'A49', eventName: '4x100 meter', category: 'Tahun 5 Perempuan', type: 'track' as const, stage: 'Akhir', status: 'pending' as const, scheduledTime: '07:00 AM (Hari 2)' },
-      { id: 'ev-50', code: 'A50', eventName: '4x100 meter', category: 'Tahun 5 Lelaki', type: 'track' as const, stage: 'Akhir', status: 'pending' as const, scheduledTime: '07:00 AM (Hari 2)' },
-      { id: 'ev-51', code: 'A51', eventName: '4x100 meter', category: 'Tahun 6 Perempuan', type: 'track' as const, stage: 'Akhir', status: 'pending' as const, scheduledTime: '07:00 AM (Hari 2)' },
-      { id: 'ev-52', code: 'A52', eventName: '4x100 meter', category: 'Tahun 6 Lelaki', type: 'track' as const, stage: 'Akhir', status: 'pending' as const, scheduledTime: '07:00 AM (Hari 2)' },
+      // 8.00 PAGI — Balapan: 4 x 100 Meter (Akhir)
+      { id: 'ev-27', code: 'A27', eventName: '4x100 meter', category: 'Tahun 3 Perempuan', type: 'track' as const, stage: 'Akhir', status: 'pending' as const, scheduledTime: '09:00 AM (Hari 1)' },
+      { id: 'ev-28', code: 'A28', eventName: '4x100 meter', category: 'Tahun 3 Lelaki', type: 'track' as const, stage: 'Akhir', status: 'pending' as const, scheduledTime: '09:00 AM (Hari 1)' },
+      { id: 'ev-29', code: 'A29', eventName: '4x100 meter', category: 'Tahun 4 Perempuan', type: 'track' as const, stage: 'Akhir', status: 'pending' as const, scheduledTime: '09:00 AM (Hari 1)' },
+      { id: 'ev-30', code: 'A30', eventName: '4x100 meter', category: 'Tahun 4 Lelaki', type: 'track' as const, stage: 'Akhir', status: 'pending' as const, scheduledTime: '09:00 AM (Hari 1)' },
+      { id: 'ev-31', code: 'A31', eventName: '4x100 meter', category: 'Tahun 5 Perempuan', type: 'track' as const, stage: 'Akhir', status: 'pending' as const, scheduledTime: '09:00 AM (Hari 1)' },
+      { id: 'ev-32', code: 'A32', eventName: '4x100 meter', category: 'Tahun 5 Lelaki', type: 'track' as const, stage: 'Akhir', status: 'pending' as const, scheduledTime: '09:00 AM (Hari 1)' },
+      { id: 'ev-33', code: 'A33', eventName: '4x100 meter', category: 'Tahun 6 Perempuan', type: 'track' as const, stage: 'Akhir', status: 'pending' as const, scheduledTime: '09:00 AM (Hari 1)' },
+      { id: 'ev-34', code: 'A34', eventName: '4x100 meter', category: 'Tahun 6 Lelaki', type: 'track' as const, stage: 'Akhir', status: 'pending' as const, scheduledTime: '09:00 AM (Hari 1)' },
 
       // ==========================================
-      // 📅 HARI 3 — JUMAAT, 28 OGOS 2026 (7:00 AM)
-      // Padang SK Beringis (13 Acara Rasmi & Acara Kemuncak)
+      // 📅 HARI 2 — KHAMIS, 27 OGOS 2026 (7:30 AM)
+      // Padang SK Beringis (26 Acara Rasmi)
       // ==========================================
 
-      // 7.00 PAGI — 50m Akhir (Tahun 1 & 2)
-      { id: 'ev-53', code: 'A53', eventName: '50 meter', category: 'Tahun 1 Perempuan', type: 'track' as const, stage: 'Akhir', status: 'pending' as const, scheduledTime: '07:00 AM (Hari 3)' },
-      { id: 'ev-54', code: 'A54', eventName: '50 meter', category: 'Tahun 1 Lelaki', type: 'track' as const, stage: 'Akhir', status: 'pending' as const, scheduledTime: '07:00 AM (Hari 3)' },
-      { id: 'ev-55', code: 'A55', eventName: '50 meter', category: 'Tahun 2 Perempuan', type: 'track' as const, stage: 'Akhir', status: 'pending' as const, scheduledTime: '07:00 AM (Hari 3)' },
-      { id: 'ev-56', code: 'A56', eventName: '50 meter', category: 'Tahun 2 Lelaki', type: 'track' as const, stage: 'Akhir', status: 'pending' as const, scheduledTime: '07:00 AM (Hari 3)' },
+      // 7.30 PAGI — Acara Padang: Lontar Peluru (Tahun 6, 5, 4) & Lompat Jauh (Tahun 6, 5)
+      { id: 'ev-35', code: 'B01', eventName: 'Lontar Peluru', category: 'Tahun 6 Perempuan', type: 'field' as const, stage: 'Akhir', status: 'pending' as const, scheduledTime: '07:30 AM (Hari 2)' },
+      { id: 'ev-36', code: 'B02', eventName: 'Lontar Peluru', category: 'Tahun 6 Lelaki', type: 'field' as const, stage: 'Akhir', status: 'pending' as const, scheduledTime: '07:30 AM (Hari 2)' },
+      { id: 'ev-37', code: 'B03', eventName: 'Lontar Peluru', category: 'Tahun 5 Perempuan', type: 'field' as const, stage: 'Akhir', status: 'pending' as const, scheduledTime: '07:30 AM (Hari 2)' },
+      { id: 'ev-38', code: 'B04', eventName: 'Lontar Peluru', category: 'Tahun 5 Lelaki', type: 'field' as const, stage: 'Akhir', status: 'pending' as const, scheduledTime: '07:30 AM (Hari 2)' },
+      { id: 'ev-39', code: 'B05', eventName: 'Lontar Peluru', category: 'Tahun 4 Perempuan', type: 'field' as const, stage: 'Akhir', status: 'pending' as const, scheduledTime: '07:30 AM (Hari 2)' },
+      { id: 'ev-40', code: 'B06', eventName: 'Lontar Peluru', category: 'Tahun 4 Lelaki', type: 'field' as const, stage: 'Akhir', status: 'pending' as const, scheduledTime: '07:30 AM (Hari 2)' },
+      { id: 'ev-41', code: 'B07', eventName: 'Lompat Jauh', category: 'Tahun 6 Perempuan', type: 'field' as const, stage: 'Akhir', status: 'pending' as const, scheduledTime: '07:30 AM (Hari 2)' },
+      { id: 'ev-42', code: 'B08', eventName: 'Lompat Jauh', category: 'Tahun 6 Lelaki', type: 'field' as const, stage: 'Akhir', status: 'pending' as const, scheduledTime: '07:30 AM (Hari 2)' },
+      { id: 'ev-43', code: 'B09', eventName: 'Lompat Jauh', category: 'Tahun 5 Perempuan', type: 'field' as const, stage: 'Akhir', status: 'pending' as const, scheduledTime: '07:30 AM (Hari 2)' },
+      { id: 'ev-44', code: 'B10', eventName: 'Lompat Jauh', category: 'Tahun 5 Lelaki', type: 'field' as const, stage: 'Akhir', status: 'pending' as const, scheduledTime: '07:30 AM (Hari 2)' },
 
-      // 7.00 PAGI — 100m Akhir (Tahun 3, 4, 5)
-      { id: 'ev-57', code: 'A57', eventName: '100 meter', category: 'Tahun 3 Perempuan', type: 'track' as const, stage: 'Akhir', status: 'pending' as const, scheduledTime: '07:00 AM (Hari 3)' },
-      { id: 'ev-58', code: 'A58', eventName: '100 meter', category: 'Tahun 3 Lelaki', type: 'track' as const, stage: 'Akhir', status: 'pending' as const, scheduledTime: '07:00 AM (Hari 3)' },
-      { id: 'ev-59', code: 'A59', eventName: '100 meter', category: 'Tahun 4 Perempuan', type: 'track' as const, stage: 'Akhir', status: 'pending' as const, scheduledTime: '07:00 AM (Hari 3)' },
-      { id: 'ev-60', code: 'A60', eventName: '100 meter', category: 'Tahun 4 Lelaki', type: 'track' as const, stage: 'Akhir', status: 'pending' as const, scheduledTime: '07:00 AM (Hari 3)' },
-      { id: 'ev-61', code: 'A61', eventName: '100 meter', category: 'Tahun 5 Perempuan', type: 'track' as const, stage: 'Akhir', status: 'pending' as const, scheduledTime: '07:00 AM (Hari 3)' },
-      { id: 'ev-62', code: 'A62', eventName: '100 meter', category: 'Tahun 5 Lelaki', type: 'track' as const, stage: 'Akhir', status: 'pending' as const, scheduledTime: '07:00 AM (Hari 3)' },
+      // 8.00 PAGI — Balapan: 80 Meter (Tahun 1 & 2)
+      { id: 'ev-45', code: 'B11', eventName: '80 meter', category: 'Tahun 1 Perempuan', type: 'track' as const, stage: 'Akhir', status: 'pending' as const, scheduledTime: '08:00 AM (Hari 2)' },
+      { id: 'ev-46', code: 'B12', eventName: '80 meter', category: 'Tahun 1 Lelaki', type: 'track' as const, stage: 'Akhir', status: 'pending' as const, scheduledTime: '08:00 AM (Hari 2)' },
+      { id: 'ev-47', code: 'B13', eventName: '80 meter', category: 'Tahun 2 Perempuan', type: 'track' as const, stage: 'Akhir', status: 'pending' as const, scheduledTime: '08:00 AM (Hari 2)' },
+      { id: 'ev-48', code: 'B14', eventName: '80 meter', category: 'Tahun 2 Lelaki', type: 'track' as const, stage: 'Akhir', status: 'pending' as const, scheduledTime: '08:00 AM (Hari 2)' },
 
-      // 8.30 PAGI — Acara Perasmian, Ikrar & 100m Akhir Tahun 6
-      { id: 'ev-63', code: 'A63', eventName: '100 meter', category: 'Tahun 6 Perempuan', type: 'track' as const, stage: 'Akhir', status: 'pending' as const, scheduledTime: '09:30 AM (Hari 3)' },
-      { id: 'ev-64', code: 'A64', eventName: '100 meter', category: 'Tahun 6 Lelaki', type: 'track' as const, stage: 'Akhir', status: 'pending' as const, scheduledTime: '09:30 AM (Hari 3)' },
-      { id: 'ev-65', code: 'A65', eventName: 'Relay Ibubapa/Guru', category: 'Terbuka', type: 'track' as const, stage: 'Akhir', status: 'pending' as const, scheduledTime: '10:00 AM (Hari 3)' },
+      // 8.00 PAGI — Balapan: 100 Meter (Tahun 3, 4, 5, 6)
+      { id: 'ev-49', code: 'B15', eventName: '100 meter', category: 'Tahun 3 Perempuan', type: 'track' as const, stage: 'Akhir', status: 'pending' as const, scheduledTime: '08:00 AM (Hari 2)' },
+      { id: 'ev-50', code: 'B16', eventName: '100 meter', category: 'Tahun 3 Lelaki', type: 'track' as const, stage: 'Akhir', status: 'pending' as const, scheduledTime: '08:00 AM (Hari 2)' },
+      { id: 'ev-51', code: 'B17', eventName: '100 meter', category: 'Tahun 4 Perempuan', type: 'track' as const, stage: 'Akhir', status: 'pending' as const, scheduledTime: '08:00 AM (Hari 2)' },
+      { id: 'ev-52', code: 'B18', eventName: '100 meter', category: 'Tahun 4 Lelaki', type: 'track' as const, stage: 'Akhir', status: 'pending' as const, scheduledTime: '08:00 AM (Hari 2)' },
+      { id: 'ev-53', code: 'B19', eventName: '100 meter', category: 'Tahun 5 Perempuan', type: 'track' as const, stage: 'Akhir', status: 'pending' as const, scheduledTime: '08:00 AM (Hari 2)' },
+      { id: 'ev-54', code: 'B20', eventName: '100 meter', category: 'Tahun 5 Lelaki', type: 'track' as const, stage: 'Akhir', status: 'pending' as const, scheduledTime: '08:00 AM (Hari 2)' },
+      { id: 'ev-55', code: 'B21', eventName: '100 meter', category: 'Tahun 6 Perempuan', type: 'track' as const, stage: 'Akhir', status: 'pending' as const, scheduledTime: '08:00 AM (Hari 2)' },
+      { id: 'ev-56', code: 'B22', eventName: '100 meter', category: 'Tahun 6 Lelaki', type: 'track' as const, stage: 'Akhir', status: 'pending' as const, scheduledTime: '08:00 AM (Hari 2)' },
+
+      // 8.00 PAGI — Balapan: 4 x 50 Meter (Tahun 1 & 2)
+      { id: 'ev-57', code: 'B23', eventName: '4x50 meter', category: 'Tahun 1 Perempuan', type: 'track' as const, stage: 'Akhir', status: 'pending' as const, scheduledTime: '08:30 AM (Hari 2)' },
+      { id: 'ev-58', code: 'B24', eventName: '4x50 meter', category: 'Tahun 1 Lelaki', type: 'track' as const, stage: 'Akhir', status: 'pending' as const, scheduledTime: '08:30 AM (Hari 2)' },
+      { id: 'ev-59', code: 'B25', eventName: '4x50 meter', category: 'Tahun 2 Perempuan', type: 'track' as const, stage: 'Akhir', status: 'pending' as const, scheduledTime: '08:30 AM (Hari 2)' },
+      { id: 'ev-60', code: 'B26', eventName: '4x50 meter', category: 'Tahun 2 Lelaki', type: 'track' as const, stage: 'Akhir', status: 'pending' as const, scheduledTime: '08:30 AM (Hari 2)' },
+
+      // ==========================================
+      // 📅 HARI 3 — JUMAAT, 28 OGOS 2026 (7:30 AM)
+      // Padang SK Beringis (7 Acara Rasmi & Acara Kemuncak)
+      // ==========================================
+
+      // 7.30 PAGI — Balapan: 4 x 200m Akhir (Tahun 4, 5, 6)
+      { id: 'ev-61', code: 'C01', eventName: '4x200 meter', category: 'Tahun 4 Perempuan', type: 'track' as const, stage: 'Akhir', status: 'pending' as const, scheduledTime: '07:30 AM (Hari 3)' },
+      { id: 'ev-62', code: 'C02', eventName: '4x200 meter', category: 'Tahun 4 Lelaki', type: 'track' as const, stage: 'Akhir', status: 'pending' as const, scheduledTime: '07:30 AM (Hari 3)' },
+      { id: 'ev-63', code: 'C03', eventName: '4x200 meter', category: 'Tahun 5 Perempuan', type: 'track' as const, stage: 'Akhir', status: 'pending' as const, scheduledTime: '07:30 AM (Hari 3)' },
+      { id: 'ev-64', code: 'C04', eventName: '4x200 meter', category: 'Tahun 5 Lelaki', type: 'track' as const, stage: 'Akhir', status: 'pending' as const, scheduledTime: '07:30 AM (Hari 3)' },
+      { id: 'ev-65', code: 'C05', eventName: '4x200 meter', category: 'Tahun 6 Perempuan', type: 'track' as const, stage: 'Akhir', status: 'pending' as const, scheduledTime: '07:30 AM (Hari 3)' },
+      { id: 'ev-66', code: 'C06', eventName: '4x200 meter', category: 'Tahun 6 Lelaki', type: 'track' as const, stage: 'Akhir', status: 'pending' as const, scheduledTime: '07:30 AM (Hari 3)' },
+
+      // 9.30 PAGI — Acara Perasmian, Penutupan & Relay Terbuka
+      { id: 'ev-67', code: 'C07', eventName: 'Relay Ibubapa/Guru', category: 'Terbuka', type: 'track' as const, stage: 'Akhir', status: 'pending' as const, scheduledTime: '09:30 AM (Hari 3)' },
     ]
 
     // Remove any obsolete events not in the current official schedule

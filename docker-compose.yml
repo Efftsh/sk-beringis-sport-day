@@ -36,7 +36,7 @@ services:
       POSTGRES_PASSWORD: ${DB_PASSWORD:-secretpassword}
       POSTGRES_DB: ${DB_DATABASE:-sk_beringis_db}
     ports:
-      - '5432:5432'
+      - '${DB_PORT:-5433}:5432'
     volumes:
       - pgdata:/var/lib/postgresql/data
     healthcheck:

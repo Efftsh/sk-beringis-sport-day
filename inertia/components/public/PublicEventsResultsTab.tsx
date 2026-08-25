@@ -22,49 +22,56 @@ interface PublicEventsResultsTabProps {
 }
 
 // Classify events based on the official tournament schedule poster
-export function getEventDay(eventName: string, stage: string, category: string): 1 | 2 | 3 {
+export function getEventDay(eventName: string, _stage: string, category: string, scheduledTime?: string): 1 | 2 | 3 {
+  if (scheduledTime) {
+    const st = scheduledTime.toLowerCase()
+    if (st.includes('hari 1') || st.includes('day 1') || st.includes('26 ogos') || st.includes('rabu')) return 1
+    if (st.includes('hari 2') || st.includes('day 2') || st.includes('27 ogos') || st.includes('khamis')) return 2
+    if (st.includes('hari 3') || st.includes('day 3') || st.includes('28 ogos') || st.includes('jumaat')) return 3
+  }
+
   const name = eventName.toLowerCase()
   const cat = category.toLowerCase()
-  const stg = stage.toLowerCase()
 
   // Hari 1: Rabu, 26 Ogos 2026
   // - 50m / 4x50m Prasekolah (6 Tahun)
-  // - Acara Padang: Lompat Jauh, Lontar Peluru, Lompat Tinggi
-  // - 200m (Saringan)
-  // - 4x200m (Akhir)
+  // - Acara Padang: Lompat Jauh (Tahun 3 & 4), Lompat Tinggi (Tahun 4, 5, 6)
+  // - 200m (Saringan & Akhir) Tahun 4, 5, 6
+  // - 4x100m (Akhir) Tahun 3, 4, 5, 6
   if (
-    name.includes('lompat jauh') ||
-    name.includes('lontar peluru') ||
+    (name.includes('50') && (cat.includes('6 tahun') || cat.includes('pra') || cat.includes('prasekolah'))) ||
+    (name.includes('lompat jauh') && (cat.includes('tahun 3') || cat.includes('tahun 4') || cat.includes('thn 3') || cat.includes('thn 4'))) ||
     name.includes('lompat tinggi') ||
-    (name.includes('200') && (stg.includes('saringan') || name.includes('saringan'))) ||
-    name.includes('4x200') ||
-    name.includes('4 x 200') ||
-    (name.includes('50') && (cat.includes('6 tahun') || cat.includes('pra') || cat.includes('prasekolah')))
+    (name.includes('200') && !name.includes('4x200') && !name.includes('4 x 200')) ||
+    name.includes('4x100') ||
+    name.includes('4 x 100')
   ) {
     return 1
   }
 
   // Hari 2: Khamis, 27 Ogos 2026
-  // - 200m (Akhir)
+  // - Lontar Peluru (Tahun 4, 5, 6)
+  // - Lompat Jauh (Tahun 5 & 6)
+  // - 80m (Akhir) Tahun 1 & 2
+  // - 100m (Akhir) Tahun 3, 4, 5, 6
   // - 4x50m (Akhir) Tahun 1 & 2
-  // - 4x100m (Akhir) Tahun 3, 4, 5, 6
   if (
-    (name.includes('200') && !stg.includes('saringan') && !name.includes('saringan') && !name.includes('4x200') && !name.includes('4 x 200')) ||
-    (name.includes('4x50') && !cat.includes('6 tahun') && !cat.includes('pra')) ||
-    name.includes('4x100') ||
-    name.includes('4 x 100')
+    name.includes('lontar peluru') ||
+    (name.includes('lompat jauh') && (cat.includes('tahun 5') || cat.includes('tahun 6') || cat.includes('thn 5') || cat.includes('thn 6'))) ||
+    name.includes('80') ||
+    (name.includes('100') && !name.includes('4x100') && !name.includes('4 x 100')) ||
+    (name.includes('4x50') && !cat.includes('6 tahun') && !cat.includes('pra'))
   ) {
     return 2
   }
 
   // Hari 3: Jumaat, 28 Ogos 2026
-  // - 50m (Akhir) Tahun 1 & 2
-  // - 100m (Akhir) Tahun 3, 4, 5, 6
+  // - 4x200m (Akhir) Tahun 4, 5, 6
   // - Relay Terbuka Ibubapa/Guru
   // - Perbarisan & Majlis Penutupan
   if (
-    (name.includes('50') && !name.includes('4x50') && !cat.includes('6 tahun') && !cat.includes('pra')) ||
-    name.includes('100') ||
+    name.includes('4x200') ||
+    name.includes('4 x 200') ||
     name.includes('relay') ||
     name.includes('ibubapa') ||
     name.includes('guru') ||
@@ -132,7 +139,7 @@ export default function PublicEventsResultsTab({
   // Filtered Events with Day, Status, Category, Type, House, and Search
   const filteredEvents = useMemo(() => {
     return events.filter((ev) => {
-      const eventDay = getEventDay(ev.eventName, ev.stage, ev.category)
+      const eventDay = getEventDay(ev.eventName, ev.stage, ev.category, ev.scheduledTime)
 
       // Day filter
       if (dayFilter !== 'all' && eventDay !== dayFilter) return false
@@ -179,9 +186,9 @@ export default function PublicEventsResultsTab({
   const completedCount = events.filter((e) => e.status === 'completed').length
   const pendingCount = events.length - completedCount
 
-  const day1Count = useMemo(() => events.filter((e) => getEventDay(e.eventName, e.stage, e.category) === 1).length, [events])
-  const day2Count = useMemo(() => events.filter((e) => getEventDay(e.eventName, e.stage, e.category) === 2).length, [events])
-  const day3Count = useMemo(() => events.filter((e) => getEventDay(e.eventName, e.stage, e.category) === 3).length, [events])
+  const day1Count = useMemo(() => events.filter((e) => getEventDay(e.eventName, e.stage, e.category, e.scheduledTime) === 1).length, [events])
+  const day2Count = useMemo(() => events.filter((e) => getEventDay(e.eventName, e.stage, e.category, e.scheduledTime) === 2).length, [events])
+  const day3Count = useMemo(() => events.filter((e) => getEventDay(e.eventName, e.stage, e.category, e.scheduledTime) === 3).length, [events])
 
   return (
 
@@ -350,7 +357,7 @@ export default function PublicEventsResultsTab({
               }}
             >
               <span style={{ fontSize: '12px', fontWeight: 800 }}>📅 Hari 1 (Rabu)</span>
-              <span style={{ fontSize: '10px', opacity: 0.85 }}>Padang, 4x200 ({day1Count})</span>
+              <span style={{ fontSize: '10px', opacity: 0.85 }}>Padang, 200M, 4x100 ({day1Count})</span>
             </button>
 
             <button
@@ -373,7 +380,7 @@ export default function PublicEventsResultsTab({
               }}
             >
               <span style={{ fontSize: '12px', fontWeight: 800 }}>📅 Hari 2 (Khamis)</span>
-              <span style={{ fontSize: '10px', opacity: 0.85 }}>200M, 4x100 ({day2Count})</span>
+              <span style={{ fontSize: '10px', opacity: 0.85 }}>Peluru, Jauh, 80M, 100M, 4x50 ({day2Count})</span>
             </button>
 
             <button
@@ -396,7 +403,7 @@ export default function PublicEventsResultsTab({
               }}
             >
               <span style={{ fontSize: '12px', fontWeight: 800 }}>📅 Hari 3 (Jumaat)</span>
-              <span style={{ fontSize: '10px', opacity: 0.85 }}>100M, Penutup ({day3Count})</span>
+              <span style={{ fontSize: '10px', opacity: 0.85 }}>4x200M, Penutup ({day3Count})</span>
             </button>
           </div>
         </div>
@@ -764,7 +771,7 @@ export default function PublicEventsResultsTab({
             const winner = isCompleted && ev.results && ev.results[0] ? ev.results[0] : null
             const winnerHouse = winner ? getHouse(winner.houseId) : null
             const hasBrokenRecord = (ev.results || []).some((r) => r.isRecordBroken)
-            const eventDay = getEventDay(ev.eventName, ev.stage, ev.category)
+            const eventDay = getEventDay(ev.eventName, ev.stage, ev.category, ev.scheduledTime)
 
             const dayLabel =
               eventDay === 1 ? '📅 Hari 1 (Rabu)' : eventDay === 2 ? '📅 Hari 2 (Khamis)' : '📅 Hari 3 (Jumaat)'
