@@ -1,0 +1,162 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 1160" width="800" height="1160" style="background:#ffffff; font-family:-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;">
+  <style>
+    .title { font-size: 17px; font-weight: 900; text-anchor: middle; fill: #000; letter-spacing: 0.5px; }
+    .th { font-size: 12px; font-weight: 900; text-anchor: middle; fill: #000; }
+    .th-bg { fill: #f8fafc; stroke: #000; stroke-width: 1.2; }
+    .cell { font-size: 11px; font-weight: 700; text-anchor: middle; fill: #000; }
+    .cell-left { font-size: 11px; font-weight: 700; text-anchor: start; fill: #000; }
+    .cell-border { fill: #fff; stroke: #000; stroke-width: 1; }
+    .highlight { fill: #fef08a; stroke: #000; stroke-width: 1; }
+    .highlight-text { font-size: 11px; font-weight: 900; text-anchor: middle; fill: #000; letter-spacing: 1px; }
+    .day-text { font-size: 11px; font-weight: 900; text-anchor: middle; fill: #000; }
+    .footer { font-size: 10px; font-weight: 700; fill: #64748b; text-anchor: end; }
+  </style>
+
+  <!-- Title -->
+  <text x="400" y="32" class="title">ATURCARA KEJOHANAN SUKAN SEKOLAH</text>
+  <text x="400" y="52" class="title">SK. BERINGIS</text>
+
+  <!-- Table Header -->
+  <!-- MASA (130px), ACARA (280px), KATEGORI (230px), PERINGKAT (120px) => Total = 760px. Left margin = 20 -->
+  <rect x="20" y="65" width="130" height="24" class="th-bg" />
+  <text x="85" y="81" class="th">MASA</text>
+
+  <rect x="150" y="65" width="280" height="24" class="th-bg" />
+  <text x="290" y="81" class="th">ACARA</text>
+
+  <rect x="430" y="65" width="220" height="24" class="th-bg" />
+  <text x="540" y="81" class="th">KATEGORI</text>
+
+  <rect x="650" y="65" width="130" height="24" class="th-bg" />
+  <text x="715" y="81" class="th">PERINGKAT</text>
+
+  <!-- SECTION 1: RABU PRASEKOLAH (9 rows x 20px = 180px) -->
+  <!-- MASA cell -->
+  <rect x="20" y="89" width="130" height="180" class="cell-border" />
+  <text x="85" y="150" class="day-text">RABU</text>
+  <text x="85" y="166" class="day-text">(26/08/2026)</text>
+  <text x="85" y="196" class="day-text">7.30 PAGI</text>
+
+  <!-- Rows 1-9 -->
+  <!-- Row 1 -->
+  <rect x="150" y="89" width="280" height="20" class="cell-border" /><text x="290" y="103" class="cell">50 METER</text>
+  <rect x="430" y="89" width="220" height="20" class="cell-border" /><text x="540" y="103" class="cell">(L)(A)</text>
+  <rect x="650" y="89" width="130" height="20" class="cell-border" /><text x="715" y="103" class="cell">AKHIR</text>
+
+  <!-- Row 2 -->
+  <rect x="150" y="109" width="280" height="20" class="cell-border" /><text x="290" y="123" class="cell">50 METER</text>
+  <rect x="430" y="109" width="220" height="20" class="cell-border" /><text x="540" y="123" class="cell">(L)(B)</text>
+  <rect x="650" y="109" width="130" height="20" class="cell-border" /><text x="715" y="123" class="cell">AKHIR</text>
+
+  <!-- Row 3 -->
+  <rect x="150" y="129" width="280" height="20" class="cell-border" /><text x="290" y="143" class="cell">50 METER</text>
+  <rect x="430" y="129" width="220" height="20" class="cell-border" /><text x="540" y="143" class="cell">(L)(C)</text>
+  <rect x="650" y="129" width="130" height="20" class="cell-border" /><text x="715" y="143" class="cell">AKHIR</text>
+
+  <!-- Row 4 -->
+  <rect x="150" y="149" width="280" height="20" class="cell-border" /><text x="290" y="163" class="cell">50 METER</text>
+  <rect x="430" y="149" width="220" height="20" class="cell-border" /><text x="540" y="163" class="cell">(P)(A)</text>
+  <rect x="650" y="149" width="130" height="20" class="cell-border" /><text x="715" y="163" class="cell">AKHIR</text>
+
+  <!-- Row 5 -->
+  <rect x="150" y="169" width="280" height="20" class="cell-border" /><text x="290" y="183" class="cell">50 METER</text>
+  <rect x="430" y="169" width="220" height="20" class="cell-border" /><text x="540" y="183" class="cell">(P)(B)</text>
+  <rect x="650" y="169" width="130" height="20" class="cell-border" /><text x="715" y="183" class="cell">AKHIR</text>
+
+  <!-- Row 6 -->
+  <rect x="150" y="189" width="280" height="20" class="cell-border" /><text x="290" y="203" class="cell">50 METER</text>
+  <rect x="430" y="189" width="220" height="20" class="cell-border" /><text x="540" y="203" class="cell">(P)(C)</text>
+  <rect x="650" y="189" width="130" height="20" class="cell-border" /><text x="715" y="203" class="cell">AKHIR</text>
+
+  <!-- Row 7 -->
+  <rect x="150" y="209" width="280" height="20" class="cell-border" /><text x="290" y="223" class="cell">50 METER</text>
+  <rect x="430" y="209" width="220" height="20" class="cell-border" /><text x="540" y="223" class="cell">(CAMPURAN)</text>
+  <rect x="650" y="209" width="130" height="20" class="cell-border" /><text x="715" y="223" class="cell">AKHIR</text>
+
+  <!-- Row 8 -->
+  <rect x="150" y="229" width="280" height="20" class="cell-border" /><text x="290" y="243" class="cell">4X50 METER</text>
+  <rect x="430" y="229" width="220" height="20" class="cell-border" /><text x="540" y="243" class="cell">(L)</text>
+  <rect x="650" y="229" width="130" height="20" class="cell-border" /><text x="715" y="243" class="cell">AKHIR</text>
+
+  <!-- Row 9 -->
+  <rect x="150" y="249" width="280" height="20" class="cell-border" /><text x="290" y="263" class="cell">4X50 METER</text>
+  <rect x="430" y="249" width="220" height="20" class="cell-border" /><text x="540" y="243" class="cell">(P)</text>
+  <rect x="650" y="249" width="130" height="20" class="cell-border" /><text x="715" y="263" class="cell">AKHIR</text>
+
+  <!-- PENYAMPAIAN HADIAH -->
+  <rect x="20" y="269" width="760" height="20" class="highlight" />
+  <text x="400" y="283" class="highlight-text">PENYAMPAIAN HADIAH</text>
+
+  <!-- SECTION 2: ACARA PADANG (Lompat Jauh 4 rows = 80px, Lompat Tinggi 6 rows = 120px) -->
+  <!-- Lompat Jauh -->
+  <rect x="20" y="289" width="130" height="80" class="cell-border" />
+  <text x="85" y="333" class="day-text">7.30 PAGI</text>
+
+  <rect x="150" y="289" width="280" height="20" class="cell-border" /><text x="290" y="303" class="cell">LOMPAT JAUH</text><rect x="430" y="289" width="220" height="20" class="cell-border" /><text x="540" y="303" class="cell">THN 3P</text><rect x="650" y="289" width="130" height="20" class="cell-border" /><text x="715" y="303" class="cell">AKHIR</text>
+  <rect x="150" y="309" width="280" height="20" class="cell-border" /><text x="290" y="323" class="cell">LOMPAT JAUH</text><rect x="430" y="309" width="220" height="20" class="cell-border" /><text x="540" y="323" class="cell">THN 3L</text><rect x="650" y="309" width="130" height="20" class="cell-border" /><text x="715" y="323" class="cell">AKHIR</text>
+  <rect x="150" y="329" width="280" height="20" class="cell-border" /><text x="290" y="343" class="cell">LOMPAT JAUH</text><rect x="430" y="329" width="220" height="20" class="cell-border" /><text x="540" y="343" class="cell">THN 4P</text><rect x="650" y="329" width="130" height="20" class="cell-border" /><text x="715" y="343" class="cell">AKHIR</text>
+  <rect x="150" y="349" width="280" height="20" class="cell-border" /><text x="290" y="363" class="cell">LOMPAT JAUH</text><rect x="430" y="349" width="220" height="20" class="cell-border" /><text x="540" y="363" class="cell">THN 4L</text><rect x="650" y="349" width="130" height="20" class="cell-border" /><text x="715" y="363" class="cell">AKHIR</text>
+
+  <!-- Lompat Tinggi -->
+  <rect x="20" y="369" width="130" height="120" class="cell-border" />
+  <text x="85" y="433" class="day-text">7.30 PAGI</text>
+
+  <rect x="150" y="369" width="280" height="20" class="cell-border" /><text x="290" y="383" class="cell">LOMPAT TINGGI</text><rect x="430" y="369" width="220" height="20" class="cell-border" /><text x="540" y="383" class="cell">THN 5P</text><rect x="650" y="369" width="130" height="20" class="cell-border" /><text x="715" y="383" class="cell">AKHIR</text>
+  <rect x="150" y="389" width="280" height="20" class="cell-border" /><text x="290" y="403" class="cell">LOMPAT TINGGI</text><rect x="430" y="389" width="220" height="20" class="cell-border" /><text x="540" y="403" class="cell">THN 5L</text><rect x="650" y="389" width="130" height="20" class="cell-border" /><text x="715" y="403" class="cell">AKHIR</text>
+  <rect x="150" y="409" width="280" height="20" class="cell-border" /><text x="290" y="423" class="cell">LOMPAT TINGGI</text><rect x="430" y="409" width="220" height="20" class="cell-border" /><text x="540" y="423" class="cell">THN 4P</text><rect x="650" y="409" width="130" height="20" class="cell-border" /><text x="715" y="423" class="cell">AKHIR</text>
+  <rect x="150" y="429" width="280" height="20" class="cell-border" /><text x="290" y="443" class="cell">LOMPAT TINGGI</text><rect x="430" y="429" width="220" height="20" class="cell-border" /><text x="540" y="443" class="cell">THN 4L</text><rect x="650" y="429" width="130" height="20" class="cell-border" /><text x="715" y="443" class="cell">AKHIR</text>
+  <rect x="150" y="449" width="280" height="20" class="cell-border" /><text x="290" y="463" class="cell">LOMPAT TINGGI</text><rect x="430" y="449" width="220" height="20" class="cell-border" /><text x="540" y="463" class="cell">THN 6P</text><rect x="650" y="449" width="130" height="20" class="cell-border" /><text x="715" y="463" class="cell">AKHIR</text>
+  <rect x="150" y="469" width="280" height="20" class="cell-border" /><text x="290" y="483" class="cell">LOMPAT TINGGI</text><rect x="430" y="469" width="220" height="20" class="cell-border" /><text x="540" y="483" class="cell">THN 6L</text><rect x="650" y="469" width="130" height="20" class="cell-border" /><text x="715" y="483" class="cell">AKHIR</text>
+
+  <!-- PENYAMPAIAN HADIAH -->
+  <rect x="20" y="489" width="760" height="20" class="highlight" />
+  <text x="400" y="503" class="highlight-text">PENYAMPAIAN HADIAH</text>
+
+  <!-- SECTION 3: ACARA BALAPAN (20 rows x 20px = 400px) -->
+  <rect x="20" y="509" width="130" height="400" class="cell-border" />
+  <text x="85" y="713" class="day-text">8.00 PAGI</text>
+
+  <!-- 200m Saringan (6 rows) -->
+  <rect x="150" y="509" width="280" height="20" class="cell-border" /><text x="290" y="523" class="cell">200 M</text><rect x="430" y="509" width="220" height="20" class="cell-border" /><text x="540" y="523" class="cell">THN 4 P</text><rect x="650" y="509" width="130" height="20" class="cell-border" /><text x="715" y="523" class="cell">SARINGAN</text>
+  <rect x="150" y="529" width="280" height="20" class="cell-border" /><text x="290" y="543" class="cell">200 M</text><rect x="430" y="529" width="220" height="20" class="cell-border" /><text x="540" y="543" class="cell">THN 4 L</text><rect x="650" y="529" width="130" height="20" class="cell-border" /><text x="715" y="543" class="cell">SARINGAN</text>
+  <rect x="150" y="549" width="280" height="20" class="cell-border" /><text x="290" y="563" class="cell">200 M</text><rect x="430" y="549" width="220" height="20" class="cell-border" /><text x="540" y="563" class="cell">THN 5 P</text><rect x="650" y="549" width="130" height="20" class="cell-border" /><text x="715" y="563" class="cell">SARINGAN</text>
+  <rect x="150" y="569" width="280" height="20" class="cell-border" /><text x="290" y="583" class="cell">200 M</text><rect x="430" y="569" width="220" height="20" class="cell-border" /><text x="540" y="583" class="cell">THN 5 L</text><rect x="650" y="569" width="130" height="20" class="cell-border" /><text x="715" y="583" class="cell">SARINGAN</text>
+  <rect x="150" y="589" width="280" height="20" class="cell-border" /><text x="290" y="603" class="cell">200 M</text><rect x="430" y="589" width="220" height="20" class="cell-border" /><text x="540" y="603" class="cell">THN 6 P</text><rect x="650" y="589" width="130" height="20" class="cell-border" /><text x="715" y="603" class="cell">SARINGAN</text>
+  <rect x="150" y="609" width="280" height="20" class="cell-border" /><text x="290" y="623" class="cell">200 M</text><rect x="430" y="609" width="220" height="20" class="cell-border" /><text x="540" y="623" class="cell">THN 6 L</text><rect x="650" y="609" width="130" height="20" class="cell-border" /><text x="715" y="623" class="cell">SARINGAN</text>
+
+  <!-- 200m Akhir (6 rows) -->
+  <rect x="150" y="629" width="280" height="20" class="cell-border" /><text x="290" y="643" class="cell">200 M</text><rect x="430" y="629" width="220" height="20" class="cell-border" /><text x="540" y="643" class="cell">THN 4 P</text><rect x="650" y="629" width="130" height="20" class="cell-border" /><text x="715" y="643" class="cell">AKHIR</text>
+  <rect x="150" y="649" width="280" height="20" class="cell-border" /><text x="290" y="663" class="cell">200 M</text><rect x="430" y="649" width="220" height="20" class="cell-border" /><text x="540" y="663" class="cell">THN 4 L</text><rect x="650" y="649" width="130" height="20" class="cell-border" /><text x="715" y="663" class="cell">AKHIR</text>
+  <rect x="150" y="669" width="280" height="20" class="cell-border" /><text x="290" y="683" class="cell">200 M</text><rect x="430" y="669" width="220" height="20" class="cell-border" /><text x="540" y="683" class="cell">THN 5 P</text><rect x="650" y="669" width="130" height="20" class="cell-border" /><text x="715" y="683" class="cell">AKHIR</text>
+  <rect x="150" y="689" width="280" height="20" class="cell-border" /><text x="290" y="703" class="cell">200 M</text><rect x="430" y="689" width="220" height="20" class="cell-border" /><text x="540" y="703" class="cell">THN 5 L</text><rect x="650" y="689" width="130" height="20" class="cell-border" /><text x="715" y="703" class="cell">AKHIR</text>
+  <rect x="150" y="709" width="280" height="20" class="cell-border" /><text x="290" y="723" class="cell">200 M</text><rect x="430" y="709" width="220" height="20" class="cell-border" /><text x="540" y="723" class="cell">THN 6 P</text><rect x="650" y="709" width="130" height="20" class="cell-border" /><text x="715" y="723" class="cell">AKHIR</text>
+  <rect x="150" y="729" width="280" height="20" class="cell-border" /><text x="290" y="743" class="cell">200 M</text><rect x="430" y="729" width="220" height="20" class="cell-border" /><text x="540" y="743" class="cell">THN 6 L</text><rect x="650" y="729" width="130" height="20" class="cell-border" /><text x="715" y="743" class="cell">AKHIR</text>
+
+  <!-- 4x100m Akhir (8 rows) -->
+  <rect x="150" y="749" width="280" height="20" class="cell-border" /><text x="290" y="763" class="cell">4X100 M</text><rect x="430" y="749" width="220" height="20" class="cell-border" /><text x="540" y="763" class="cell">THN 3P</text><rect x="650" y="749" width="130" height="20" class="cell-border" /><text x="715" y="763" class="cell">AKHIR</text>
+  <rect x="150" y="769" width="280" height="20" class="cell-border" /><text x="290" y="783" class="cell">4X100 M</text><rect x="430" y="769" width="220" height="20" class="cell-border" /><text x="540" y="783" class="cell">THN 3L</text><rect x="650" y="769" width="130" height="20" class="cell-border" /><text x="715" y="783" class="cell">AKHIR</text>
+  <rect x="150" y="789" width="280" height="20" class="cell-border" /><text x="290" y="803" class="cell">4X100 M</text><rect x="430" y="789" width="220" height="20" class="cell-border" /><text x="540" y="803" class="cell">THN 4 P</text><rect x="650" y="789" width="130" height="20" class="cell-border" /><text x="715" y="803" class="cell">AKHIR</text>
+  <rect x="150" y="809" width="280" height="20" class="cell-border" /><text x="290" y="823" class="cell">4X100 M</text><rect x="430" y="809" width="220" height="20" class="cell-border" /><text x="540" y="823" class="cell">THN 4 L</text><rect x="650" y="809" width="130" height="20" class="cell-border" /><text x="715" y="823" class="cell">AKHIR</text>
+  <rect x="150" y="829" width="280" height="20" class="cell-border" /><text x="290" y="843" class="cell">4X100 M</text><rect x="430" y="829" width="220" height="20" class="cell-border" /><text x="540" y="843" class="cell">THN 5 P</text><rect x="650" y="829" width="130" height="20" class="cell-border" /><text x="715" y="843" class="cell">AKHIR</text>
+  <rect x="150" y="849" width="280" height="20" class="cell-border" /><text x="290" y="863" class="cell">4X100 M</text><rect x="430" y="849" width="220" height="20" class="cell-border" /><text x="540" y="863" class="cell">THN 5 L</text><rect x="650" y="849" width="130" height="20" class="cell-border" /><text x="715" y="863" class="cell">AKHIR</text>
+  <rect x="150" y="869" width="280" height="20" class="cell-border" /><text x="290" y="883" class="cell">4X100 M</text><rect x="430" y="869" width="220" height="20" class="cell-border" /><text x="540" y="883" class="cell">THN 6 P</text><rect x="650" y="869" width="130" height="20" class="cell-border" /><text x="715" y="883" class="cell">AKHIR</text>
+  <rect x="150" y="889" width="280" height="20" class="cell-border" /><text x="290" y="903" class="cell">4X100 M</text><rect x="430" y="889" width="220" height="20" class="cell-border" /><text x="540" y="903" class="cell">THN 6 L</text><rect x="650" y="889" width="130" height="20" class="cell-border" /><text x="715" y="903" class="cell">AKHIR</text>
+
+  <!-- PENYAMPAIAN HADIAH -->
+  <rect x="20" y="909" width="760" height="20" class="highlight" />
+  <text x="400" y="923" class="highlight-text">PENYAMPAIAN HADIAH</text>
+
+  <!-- SECTION 4: KHAMIS AWAL (4 rows x 20px = 80px) -->
+  <rect x="20" y="929" width="130" height="80" class="cell-border" />
+  <text x="85" y="955" class="day-text">KHAMIS</text>
+  <text x="85" y="971" class="day-text">(27/8/2026)</text>
+  <text x="85" y="995" class="day-text">7.30 PAGI</text>
+
+  <rect x="150" y="929" width="280" height="20" class="cell-border" /><text x="290" y="943" class="cell">LONTAR PELURU</text><rect x="430" y="929" width="220" height="20" class="cell-border" /><text x="540" y="943" class="cell">THN 6P</text><rect x="650" y="929" width="130" height="20" class="cell-border" /><text x="715" y="943" class="cell">AKHIR</text>
+  <rect x="150" y="949" width="280" height="20" class="cell-border" /><text x="290" y="963" class="cell">LONTAR PELURU</text><rect x="430" y="949" width="220" height="20" class="cell-border" /><text x="540" y="963" class="cell">THN 6L</text><rect x="650" y="949" width="130" height="20" class="cell-border" /><text x="715" y="963" class="cell">AKHIR</text>
+  <rect x="150" y="969" width="280" height="20" class="cell-border" /><text x="290" y="983" class="cell">LONTAR PELURU</text><rect x="430" y="969" width="220" height="20" class="cell-border" /><text x="540" y="983" class="cell">THN 5 P</text><rect x="650" y="969" width="130" height="20" class="cell-border" /><text x="715" y="983" class="cell">AKHIR</text>
+  <rect x="150" y="989" width="280" height="20" class="cell-border" /><text x="290" y="1003" class="cell">LONTAR PELURU</text><rect x="430" y="989" width="220" height="20" class="cell-border" /><text x="540" y="1003" class="cell">THN 5 L</text><rect x="650" y="989" width="130" height="20" class="cell-border" /><text x="715" y="1003" class="cell">AKHIR</text>
+
+  <!-- Footer -->
+  <text x="780" y="1030" class="footer">Muka Surat 1/2</text>
+</svg>

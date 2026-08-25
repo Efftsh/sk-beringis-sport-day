@@ -91,14 +91,14 @@ test.group('Group Relay Events & House Scoring Logic (4x50m, 4x100m, 4x200m)', (
 
   test('confirms 4x100m relay events are scheduled on Hari 1 (Day 1) and 4x50m on Hari 2', ({ assert }) => {
     const scheduledEvents = [
-      { code: 'A27', eventName: '4x100 meter', category: 'Tahun 3 Perempuan', scheduledTime: '09:00 AM (Hari 1)' },
-      { code: 'A28', eventName: '4x100 meter', category: 'Tahun 3 Lelaki', scheduledTime: '09:00 AM (Hari 1)' },
-      { code: 'A29', eventName: '4x100 meter', category: 'Tahun 4 Perempuan', scheduledTime: '09:00 AM (Hari 1)' },
-      { code: 'A30', eventName: '4x100 meter', category: 'Tahun 4 Lelaki', scheduledTime: '09:00 AM (Hari 1)' },
-      { code: 'A31', eventName: '4x100 meter', category: 'Tahun 5 Perempuan', scheduledTime: '09:00 AM (Hari 1)' },
-      { code: 'A32', eventName: '4x100 meter', category: 'Tahun 5 Lelaki', scheduledTime: '09:00 AM (Hari 1)' },
-      { code: 'A33', eventName: '4x100 meter', category: 'Tahun 6 Perempuan', scheduledTime: '09:00 AM (Hari 1)' },
-      { code: 'A34', eventName: '4x100 meter', category: 'Tahun 6 Lelaki', scheduledTime: '09:00 AM (Hari 1)' },
+      { code: 'A23', eventName: '4x100 meter', category: 'Tahun 3 Perempuan', scheduledTime: '09:00 AM (Hari 1)' },
+      { code: 'A24', eventName: '4x100 meter', category: 'Tahun 3 Lelaki', scheduledTime: '09:00 AM (Hari 1)' },
+      { code: 'A25', eventName: '4x100 meter', category: 'Tahun 4 Perempuan', scheduledTime: '09:00 AM (Hari 1)' },
+      { code: 'A26', eventName: '4x100 meter', category: 'Tahun 4 Lelaki', scheduledTime: '09:00 AM (Hari 1)' },
+      { code: 'A27', eventName: '4x100 meter', category: 'Tahun 5 Perempuan', scheduledTime: '09:00 AM (Hari 1)' },
+      { code: 'A28', eventName: '4x100 meter', category: 'Tahun 5 Lelaki', scheduledTime: '09:00 AM (Hari 1)' },
+      { code: 'A29', eventName: '4x100 meter', category: 'Tahun 6 Perempuan', scheduledTime: '09:00 AM (Hari 1)' },
+      { code: 'A30', eventName: '4x100 meter', category: 'Tahun 6 Lelaki', scheduledTime: '09:00 AM (Hari 1)' },
       { code: 'B23', eventName: '4x50 meter', category: 'Tahun 1 Perempuan', scheduledTime: '08:30 AM (Hari 2)' },
       { code: 'C01', eventName: '4x200 meter', category: 'Tahun 4 Perempuan', scheduledTime: '07:30 AM (Hari 3)' },
     ]

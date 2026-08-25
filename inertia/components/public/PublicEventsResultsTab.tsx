@@ -34,12 +34,10 @@ export function getEventDay(eventName: string, _stage: string, category: string,
   const cat = category.toLowerCase()
 
   // Hari 1: Rabu, 26 Ogos 2026
-  // - 50m / 4x50m Prasekolah (6 Tahun)
   // - Acara Padang: Lompat Jauh (Tahun 3 & 4), Lompat Tinggi (Tahun 4, 5, 6)
   // - 200m (Saringan & Akhir) Tahun 4, 5, 6
   // - 4x100m (Akhir) Tahun 3, 4, 5, 6
   if (
-    (name.includes('50') && (cat.includes('6 tahun') || cat.includes('pra') || cat.includes('prasekolah'))) ||
     (name.includes('lompat jauh') && (cat.includes('tahun 3') || cat.includes('tahun 4') || cat.includes('thn 3') || cat.includes('thn 4'))) ||
     name.includes('lompat tinggi') ||
     (name.includes('200') && !name.includes('4x200') && !name.includes('4 x 200')) ||
@@ -102,6 +100,7 @@ export default function PublicEventsResultsTab({
   })
   const [isPosterModalOpen, setIsPosterModalOpen] = useState(false)
   const [showPosterPreview, setShowPosterPreview] = useState(false)
+  const [posterPage, setPosterPage] = useState<1 | 2>(1)
 
   const toggleExpand = (id: string) => {
     setExpandedEventIds((prev) => {
@@ -469,34 +468,74 @@ export default function PublicEventsResultsTab({
           </div>
         </div>
 
-        {/* In-page Poster Preview (Toggleable) */}
+        {/* In-page Poster Preview (Toggleable with Page 1 / Page 2 Switcher) */}
         {showPosterPreview && (
           <div
             style={{
               marginBottom: '16px',
               textAlign: 'center',
               background: '#0f172a',
-              padding: '12px',
+              padding: '14px',
               borderRadius: '14px',
               boxShadow: '0 8px 24px rgba(0,0,0,0.15)',
             }}
           >
+            {/* Page Switcher Tabs */}
+            <div style={{ display: 'flex', justifyContent: 'center', gap: '8px', marginBottom: '12px' }}>
+              <button
+                type="button"
+                onClick={() => setPosterPage(1)}
+                style={{
+                  padding: '6px 14px',
+                  borderRadius: '8px',
+                  fontSize: '12px',
+                  fontWeight: 800,
+                  border: posterPage === 1 ? '2px solid #38bdf8' : '1px solid #334155',
+                  background: posterPage === 1 ? '#0284c7' : '#1e293b',
+                  color: '#ffffff',
+                  cursor: 'pointer',
+                  transition: 'all 0.15s ease',
+                }}
+              >
+                📄 Muka Surat 1 (Rabu &amp; Khamis)
+              </button>
+              <button
+                type="button"
+                onClick={() => setPosterPage(2)}
+                style={{
+                  padding: '6px 14px',
+                  borderRadius: '8px',
+                  fontSize: '12px',
+                  fontWeight: 800,
+                  border: posterPage === 2 ? '2px solid #38bdf8' : '1px solid #334155',
+                  background: posterPage === 2 ? '#0284c7' : '#1e293b',
+                  color: '#ffffff',
+                  cursor: 'pointer',
+                  transition: 'all 0.15s ease',
+                }}
+              >
+                📄 Muka Surat 2 (Khamis &amp; Jumaat)
+              </button>
+            </div>
+
             <img
-              src="/images/poster_aturcara_kejohanan.jpg"
-              alt="Poster Aturcara Kejohanan Olahraga SK Beringis 2026"
+              src={posterPage === 1 ? '/images/poster_aturcara_page1.svg' : '/images/poster_aturcara_page2.svg'}
+              alt={`Poster Aturcara Kejohanan Olahraga SK Beringis 2026 - Muka Surat ${posterPage}`}
               style={{
                 maxWidth: '100%',
-                maxHeight: '550px',
+                maxHeight: '650px',
                 borderRadius: '10px',
                 objectFit: 'contain',
                 margin: '0 auto',
                 display: 'block',
                 cursor: 'pointer',
+                backgroundColor: '#ffffff',
+                boxShadow: '0 4px 16px rgba(0,0,0,0.3)',
               }}
               onClick={() => setIsPosterModalOpen(true)}
             />
-            <p style={{ color: '#94a3b8', fontSize: '11px', marginTop: '6px' }}>
-              🔍 <em>Klik pada gambar untuk skrin penuh.</em>
+            <p style={{ color: '#94a3b8', fontSize: '11px', marginTop: '8px' }}>
+              💡 Klik pada dokumen untuk paparan skrin penuh atau muat turun salinan rasmi. (Muka Surat {posterPage}/2)
             </p>
           </div>
         )}
@@ -1107,24 +1146,64 @@ export default function PublicEventsResultsTab({
               maxWidth: '900px',
               width: '100%',
               display: 'flex',
+              flexWrap: 'wrap',
               justifyContent: 'space-between',
               alignItems: 'center',
               padding: '10px 14px',
               background: '#1e293b',
               borderRadius: '14px 14px 0 0',
               color: '#ffffff',
+              gap: '8px',
             }}
             onClick={(e) => e.stopPropagation()}
           >
-            <div style={{ display: 'flex', alignItems: 'center', gap: '6px', fontWeight: 800, fontSize: '13px' }}>
-              <ImageIcon size={16} style={{ color: '#38bdf8' }} />
-              <span>Poster Aturcara 2026</span>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '6px', fontWeight: 800, fontSize: '13px' }}>
+                <ImageIcon size={16} style={{ color: '#38bdf8' }} />
+                <span>Aturcara Kejohanan Rasmi (Muka Surat {posterPage}/2)</span>
+              </div>
+
+              {/* Modal Page Switcher */}
+              <div style={{ display: 'inline-flex', background: '#0f172a', borderRadius: '8px', padding: '2px' }}>
+                <button
+                  type="button"
+                  onClick={() => setPosterPage(1)}
+                  style={{
+                    padding: '4px 10px',
+                    borderRadius: '6px',
+                    fontSize: '11px',
+                    fontWeight: 800,
+                    border: 'none',
+                    background: posterPage === 1 ? '#0284c7' : 'transparent',
+                    color: '#ffffff',
+                    cursor: 'pointer',
+                  }}
+                >
+                  Muka Surat 1
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setPosterPage(2)}
+                  style={{
+                    padding: '4px 10px',
+                    borderRadius: '6px',
+                    fontSize: '11px',
+                    fontWeight: 800,
+                    border: 'none',
+                    background: posterPage === 2 ? '#0284c7' : 'transparent',
+                    color: '#ffffff',
+                    cursor: 'pointer',
+                  }}
+                >
+                  Muka Surat 2
+                </button>
+              </div>
             </div>
 
             <div style={{ display: 'flex', gap: '6px' }}>
               <a
-                href="/images/poster_aturcara_kejohanan.jpg"
-                download="Poster_Aturcara_SK_Beringis_2026.jpg"
+                href={posterPage === 1 ? '/images/poster_aturcara_page1.svg' : '/images/poster_aturcara_page2.svg'}
+                download={`Poster_Aturcara_SK_Beringis_2026_MukaSurat_${posterPage}.svg`}
                 style={{
                   background: '#334155',
                   color: '#ffffff',
@@ -1140,7 +1219,7 @@ export default function PublicEventsResultsTab({
                 }}
               >
                 <Download size={12} />
-                <span>Simpan</span>
+                <span>Simpan M/S {posterPage}</span>
               </a>
 
               <button
@@ -1174,7 +1253,7 @@ export default function PublicEventsResultsTab({
               overflow: 'auto',
               background: '#0f172a',
               borderRadius: '0 0 14px 14px',
-              padding: '10px',
+              padding: '14px',
               display: 'flex',
               alignItems: 'center',
               justifyContent: 'center',
@@ -1182,13 +1261,14 @@ export default function PublicEventsResultsTab({
             onClick={(e) => e.stopPropagation()}
           >
             <img
-              src="/images/poster_aturcara_kejohanan.jpg"
-              alt="Poster Aturcara Kejohanan Olahraga SK Beringis 2026"
+              src={posterPage === 1 ? '/images/poster_aturcara_page1.svg' : '/images/poster_aturcara_page2.svg'}
+              alt={`Poster Aturcara Kejohanan Olahraga SK Beringis 2026 - Muka Surat ${posterPage}`}
               style={{
                 maxWidth: '100%',
                 maxHeight: '75vh',
                 objectFit: 'contain',
                 borderRadius: '6px',
+                backgroundColor: '#ffffff',
                 boxShadow: '0 8px 32px rgba(0,0,0,0.5)',
               }}
             />
