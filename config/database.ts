@@ -2,25 +2,34 @@ import env from '#start/env'
 import app from '@adonisjs/core/services/app'
 import { defineConfig } from '@adonisjs/lucid'
 
+const defaultConnection =
+  env.get('DB_CONNECTION') || (env.get('DATABASE_URL') || env.get('DB_HOST') ? 'pg' : 'sqlite')
+
 const dbConfig = defineConfig({
   /**
    * Default connection used for all queries.
    */
-  connection: env.get('DB_CONNECTION') || 'sqlite',
+  connection: defaultConnection,
 
   connections: {
     /**
-     * PostgreSQL connection (Production / Docker).
+     * PostgreSQL connection (Production / Cloud / Docker).
      */
     pg: {
       client: 'pg',
-      connection: {
-        host: env.get('DB_HOST', '127.0.0.1'),
-        port: env.get('DB_PORT', 5432),
-        user: env.get('DB_USER', 'adonis'),
-        password: env.get('DB_PASSWORD', 'secretpassword'),
-        database: env.get('DB_DATABASE', 'sk_beringis_db'),
-      },
+      connection: env.get('DATABASE_URL')
+        ? {
+            connectionString: env.get('DATABASE_URL'),
+            ssl: env.get('DB_SSL', false) ? { rejectUnauthorized: false } : undefined,
+          }
+        : {
+            host: env.get('DB_HOST', '127.0.0.1'),
+            port: env.get('DB_PORT', 5432),
+            user: env.get('DB_USER', 'adonis'),
+            password: env.get('DB_PASSWORD', 'secretpassword'),
+            database: env.get('DB_DATABASE', 'sk_beringis_db'),
+            ssl: env.get('DB_SSL', false) ? { rejectUnauthorized: false } : undefined,
+          },
       migrations: {
         naturalSort: true,
         paths: ['database/migrations'],
