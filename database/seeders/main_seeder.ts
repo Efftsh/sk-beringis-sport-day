@@ -2,7 +2,6 @@ import { BaseSeeder } from '@adonisjs/lucid/seeders'
 import House from '#models/house'
 import Event from '#models/event'
 import Athlete from '#models/athlete'
-import EventResult from '#models/event_result'
 import User from '#models/user'
 import ExcelImporterService from '#services/excel_importer_service'
 
@@ -17,10 +16,6 @@ export default class extends BaseSeeder {
         password: 'password123',
       }
     )
-
-    // Clear previous results & events for clean sync
-    await EventResult.query().delete()
-    await Event.query().delete()
 
     // 1. Seed Clean Houses (0 points, 0 medals - Top 3: Emas, Perak, Gangsa)
     const housesData = [
