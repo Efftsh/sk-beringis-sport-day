@@ -39,7 +39,7 @@ export type HomeProps = Record<string, any> & {
 }
 
 const defaultChampionship = {
-  title: 'Kejohanan Olahraga & Sukaneka Tahunan Kali Ke-14',
+  title: 'Kejohanan Sukan Tahunan Kali Sk Beringis Papar Ke-14',
   schoolName: 'SK Beringis, Papar',
   edition: '2026',
   dates: '26 - 28 Ogos 2026',
