@@ -1,5 +1,5 @@
 import React from 'react'
-import { Trophy, BookOpen, RefreshCw, Radio, Sparkles, MapPin, Calendar } from 'lucide-react'
+import { Trophy, BookOpen, RefreshCw, Radio, Sparkles, MapPin, Calendar, Camera } from 'lucide-react'
 import { router } from '@inertiajs/react'
 
 interface LiveHeaderBannerProps {
@@ -11,6 +11,7 @@ interface LiveHeaderBannerProps {
     venue: string
     status: string
     eBookletUrl?: string
+    photosUrl?: string
   }
   totalAthletes: number
   totalEvents: number
@@ -21,6 +22,7 @@ interface LiveHeaderBannerProps {
     isRecord?: boolean
   }>
   onOpenBooklet?: () => void
+  onOpenGallery?: () => void
 }
 
 export default function LiveHeaderBanner({
@@ -262,9 +264,9 @@ export default function LiveHeaderBanner({
             </div>
           </div>
 
-          {/* Quick Action Button for Flipbook / E-Buku Program */}
-          {championshipInfo.eBookletUrl && (
-            <div style={{ display: 'flex', gap: '8px', flexWrap: 'wrap', marginTop: '10px', width: '100%' }}>
+          {/* Quick Action Buttons for Flipbook & Google Photos Gallery */}
+          <div style={{ display: 'flex', gap: '8px', flexWrap: 'wrap', marginTop: '10px', width: '100%' }}>
+            {championshipInfo.eBookletUrl && (
               <button
                 type="button"
                 onClick={onOpenBooklet}
@@ -284,16 +286,42 @@ export default function LiveHeaderBanner({
                   boxShadow: '0 4px 12px rgba(245, 158, 11, 0.35)',
                   transition: 'transform 0.15s ease',
                   minHeight: '38px',
-                  width: '100%',
-                  maxWidth: '320px',
                   boxSizing: 'border-box',
                 }}
               >
                 <BookOpen size={15} />
-                <span>Buka E-Buku Program (Flipbook)</span>
+                <span>E-Buku Program</span>
               </button>
-            </div>
-          )}
+            )}
+
+            <a
+              href={championshipInfo.photosUrl || 'https://photos.app.goo.gl/ukTxVDzu1WZ4fiPcA'}
+              target="_blank"
+              rel="noopener noreferrer"
+              style={{
+                display: 'inline-flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                gap: '6px',
+                background: 'linear-gradient(135deg, #ef4444 0%, #dc2626 100%)',
+                color: '#ffffff',
+                border: 'none',
+                padding: '8px 16px',
+                borderRadius: '10px',
+                fontWeight: 800,
+                fontSize: '12px',
+                textDecoration: 'none',
+                cursor: 'pointer',
+                boxShadow: '0 4px 12px rgba(239, 68, 68, 0.35)',
+                transition: 'transform 0.15s ease',
+                minHeight: '38px',
+                boxSizing: 'border-box',
+              }}
+            >
+              <Camera size={15} />
+              <span>Galeri Foto Kejohanan</span>
+            </a>
+          </div>
         </div>
       </div>
 

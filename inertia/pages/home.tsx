@@ -1,7 +1,7 @@
 import type { FC } from 'react'
 import { useState, useMemo } from 'react'
 import { Head } from '@inertiajs/react'
-import { Trophy, Crown, BookOpen, Award, Menu, X, ChevronDown, Check, Compass } from 'lucide-react'
+import { Trophy, Crown, BookOpen, Award, Menu, X, ChevronDown, Check, Compass, Camera } from 'lucide-react'
 import LiveHeaderBanner from '../components/public/LiveHeaderBanner'
 import PublicLeaderboardTab, {
   HouseItem,
@@ -10,6 +10,7 @@ import PublicLeaderboardTab, {
 import PublicEventsResultsTab from '../components/public/PublicEventsResultsTab'
 import PublicSpecialAwardsTab from '../components/public/PublicSpecialAwardsTab'
 import PublicProgramBookTab from '../components/public/PublicProgramBookTab'
+import PublicGalleryTab from '../components/public/PublicGalleryTab'
 import ThemeToggle from '../components/theme_toggle'
 
 export type HomeProps = Record<string, any> & {
@@ -21,6 +22,7 @@ export type HomeProps = Record<string, any> & {
     venue: string
     status: string
     eBookletUrl?: string
+    photosUrl?: string
   }
   houses?: HouseItem[]
   eventsList?: EventRecord[]
@@ -44,6 +46,7 @@ const defaultChampionship = {
   venue: 'Padang SK Beringis',
   status: 'Sedang Berlangsung (Hari 1)',
   eBookletUrl: 'https://heyzine.com/flip-book/cbfede6cee.html',
+  photosUrl: 'https://photos.app.goo.gl/ukTxVDzu1WZ4fiPcA',
 }
 
 export const Home: FC<HomeProps> = ({
@@ -53,9 +56,9 @@ export const Home: FC<HomeProps> = ({
   registeredAthletes = [],
   totalAthletes = 0,
 }) => {
-  const [activeTab, setActiveTab] = useState<'leaderboard' | 'events' | 'awards' | 'booklet'>(
-    'leaderboard'
-  )
+  const [activeTab, setActiveTab] = useState<
+    'leaderboard' | 'events' | 'awards' | 'booklet' | 'gallery'
+  >('leaderboard')
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false)
 
   // Derived counts
@@ -117,6 +120,14 @@ export const Home: FC<HomeProps> = ({
       icon: BookOpen,
       color: '#7c3aed',
     },
+    {
+      id: 'gallery' as const,
+      label: 'Galeri Foto Kejohanan',
+      shortLabel: 'Galeri Foto',
+      desc: 'Album gambar & detik kejohanan di Google Photos',
+      icon: Camera,
+      color: '#ef4444',
+    },
   ]
 
   const currentTab = tabsList.find((t) => t.id === activeTab) || tabsList[0]
@@ -134,6 +145,7 @@ export const Home: FC<HomeProps> = ({
         completedEvents={completedEvents.length}
         recentHighlights={recentHighlights}
         onOpenBooklet={() => setActiveTab('booklet')}
+        onOpenGallery={() => setActiveTab('gallery')}
       />
 
       {/* Navigation Tab Bar (Desktop Tabs + Mobile Burger Drawer) */}
@@ -400,9 +412,11 @@ export const Home: FC<HomeProps> = ({
         )}
 
         {activeTab === 'booklet' && <PublicProgramBookTab url={championshipInfo.eBookletUrl} />}
+
+        {activeTab === 'gallery' && <PublicGalleryTab url={championshipInfo.photosUrl} />}
       </div>
 
-      {/* Footer & Admin Gateway */}
+      {/* Footer & Quick Links */}
       <footer
         style={{
           borderTop: '1px solid #cbd5e1',
@@ -420,7 +434,7 @@ export const Home: FC<HomeProps> = ({
             alignItems: 'center',
             textAlign: 'center',
             flexDirection: 'column',
-            gap: '8px',
+            gap: '10px',
           }}
         >
           <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
@@ -433,6 +447,54 @@ export const Home: FC<HomeProps> = ({
               {championshipInfo.schoolName}
             </span>
           </div>
+
+          <div
+            style={{
+              display: 'flex',
+              gap: '14px',
+              flexWrap: 'wrap',
+              justifyContent: 'center',
+              alignItems: 'center',
+              fontSize: '12px',
+              fontWeight: 700,
+            }}
+          >
+            <button
+              type="button"
+              onClick={() => {
+                setActiveTab('booklet')
+                window.scrollTo({ top: 0, behavior: 'smooth' })
+              }}
+              style={{
+                background: 'none',
+                border: 'none',
+                color: '#475569',
+                cursor: 'pointer',
+                display: 'inline-flex',
+                alignItems: 'center',
+                gap: '4px',
+                padding: 0,
+              }}
+            >
+              📖 E-Buku Program
+            </button>
+            <span style={{ color: '#cbd5e1' }}>•</span>
+            <a
+              href={championshipInfo.photosUrl || 'https://photos.app.goo.gl/ukTxVDzu1WZ4fiPcA'}
+              target="_blank"
+              rel="noopener noreferrer"
+              style={{
+                color: '#dc2626',
+                textDecoration: 'none',
+                display: 'inline-flex',
+                alignItems: 'center',
+                gap: '4px',
+              }}
+            >
+              📸 Album Foto Google Photos ↗
+            </a>
+          </div>
+
           <p style={{ fontSize: '12px', color: '#64748b', margin: 0 }}>
             {championshipInfo.title} • {championshipInfo.edition} • {championshipInfo.dates}
           </p>

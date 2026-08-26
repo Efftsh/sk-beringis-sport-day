@@ -13,6 +13,7 @@ export default class HomeController {
       venue: 'Padang SK Beringis',
       status: 'Sedang Berlangsung',
       eBookletUrl: 'https://heyzine.com/flip-book/cbfede6cee.html',
+      photosUrl: 'https://photos.app.goo.gl/ukTxVDzu1WZ4fiPcA',
     }
 
     // 1. Fetch live houses from Database
