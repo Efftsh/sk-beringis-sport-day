@@ -78,7 +78,19 @@ export default class extends BaseSeeder {
     ]
 
     for (const h of housesData) {
-      await House.updateOrCreate({ id: h.id }, h)
+      const existing = await House.find(h.id)
+      if (!existing) {
+        await House.create(h)
+      } else {
+        // Only update metadata, keep existing points and medals!
+        await House.query().where('id', h.id).update({
+          name: h.name,
+          color: h.color,
+          lightBg: h.lightBg,
+          badgeBg: h.badgeBg,
+          motto: h.motto,
+        })
+      }
     }
 
     // 2. Seed Official 3-Day Championship Events (Tahun 1 - Tahun 6, Saringan & Akhir)
@@ -88,17 +100,11 @@ export default class extends BaseSeeder {
       // Padang SK Beringis (30 Acara Rasmi)
       // ==========================================
 
-      // 7.30 PAGI — Acara Padang: Lompat Jauh (Tahun 3 & 4) & Lompat Tinggi (Tahun 4, 5, 6)
+      // 7.30 PAGI — Acara Padang: Lompat Jauh (Tahun 3 & 4)
       { id: 'ev-01', code: 'A01', eventName: 'Lompat Jauh', category: 'Tahun 3 Perempuan', type: 'field' as const, stage: 'Akhir', status: 'pending' as const, scheduledTime: '07:30 AM (Hari 1)' },
       { id: 'ev-02', code: 'A02', eventName: 'Lompat Jauh', category: 'Tahun 3 Lelaki', type: 'field' as const, stage: 'Akhir', status: 'pending' as const, scheduledTime: '07:30 AM (Hari 1)' },
       { id: 'ev-03', code: 'A03', eventName: 'Lompat Jauh', category: 'Tahun 4 Perempuan', type: 'field' as const, stage: 'Akhir', status: 'pending' as const, scheduledTime: '07:30 AM (Hari 1)' },
       { id: 'ev-04', code: 'A04', eventName: 'Lompat Jauh', category: 'Tahun 4 Lelaki', type: 'field' as const, stage: 'Akhir', status: 'pending' as const, scheduledTime: '07:30 AM (Hari 1)' },
-      { id: 'ev-05', code: 'A05', eventName: 'Lompat Tinggi', category: 'Tahun 5 Perempuan', type: 'field' as const, stage: 'Akhir', status: 'pending' as const, scheduledTime: '07:30 AM (Hari 1)' },
-      { id: 'ev-06', code: 'A06', eventName: 'Lompat Tinggi', category: 'Tahun 5 Lelaki', type: 'field' as const, stage: 'Akhir', status: 'pending' as const, scheduledTime: '07:30 AM (Hari 1)' },
-      { id: 'ev-07', code: 'A07', eventName: 'Lompat Tinggi', category: 'Tahun 4 Perempuan', type: 'field' as const, stage: 'Akhir', status: 'pending' as const, scheduledTime: '07:30 AM (Hari 1)' },
-      { id: 'ev-08', code: 'A08', eventName: 'Lompat Tinggi', category: 'Tahun 4 Lelaki', type: 'field' as const, stage: 'Akhir', status: 'pending' as const, scheduledTime: '07:30 AM (Hari 1)' },
-      { id: 'ev-09', code: 'A09', eventName: 'Lompat Tinggi', category: 'Tahun 6 Perempuan', type: 'field' as const, stage: 'Akhir', status: 'pending' as const, scheduledTime: '07:30 AM (Hari 1)' },
-      { id: 'ev-10', code: 'A10', eventName: 'Lompat Tinggi', category: 'Tahun 6 Lelaki', type: 'field' as const, stage: 'Akhir', status: 'pending' as const, scheduledTime: '07:30 AM (Hari 1)' },
 
       // 8.00 PAGI — Balapan: 200 Meter (Saringan)
       { id: 'ev-11', code: 'A11', eventName: '200 meter', category: 'Tahun 4 Perempuan', type: 'track' as const, stage: 'Saringan', status: 'pending' as const, scheduledTime: '08:00 AM (Hari 1)' },
@@ -128,8 +134,16 @@ export default class extends BaseSeeder {
 
       // ==========================================
       // 📅 HARI 2 — KHAMIS, 27 OGOS 2026 (7:30 AM)
-      // Padang SK Beringis (26 Acara Rasmi)
+      // Padang SK Beringis (32 Acara Rasmi)
       // ==========================================
+
+      // 7.30 PAGI — Acara Padang: Lompat Tinggi (Tahun 4, 5, 6), Lontar Peluru (Tahun 6, 5, 4) & Lompat Jauh (Tahun 6, 5)
+      { id: 'ev-05', code: 'A05', eventName: 'Lompat Tinggi', category: 'Tahun 5 Perempuan', type: 'field' as const, stage: 'Akhir', status: 'pending' as const, scheduledTime: '07:30 AM (Hari 2)' },
+      { id: 'ev-06', code: 'A06', eventName: 'Lompat Tinggi', category: 'Tahun 5 Lelaki', type: 'field' as const, stage: 'Akhir', status: 'pending' as const, scheduledTime: '07:30 AM (Hari 2)' },
+      { id: 'ev-07', code: 'A07', eventName: 'Lompat Tinggi', category: 'Tahun 4 Perempuan', type: 'field' as const, stage: 'Akhir', status: 'pending' as const, scheduledTime: '07:30 AM (Hari 2)' },
+      { id: 'ev-08', code: 'A08', eventName: 'Lompat Tinggi', category: 'Tahun 4 Lelaki', type: 'field' as const, stage: 'Akhir', status: 'pending' as const, scheduledTime: '07:30 AM (Hari 2)' },
+      { id: 'ev-09', code: 'A09', eventName: 'Lompat Tinggi', category: 'Tahun 6 Perempuan', type: 'field' as const, stage: 'Akhir', status: 'pending' as const, scheduledTime: '07:30 AM (Hari 2)' },
+      { id: 'ev-10', code: 'A10', eventName: 'Lompat Tinggi', category: 'Tahun 6 Lelaki', type: 'field' as const, stage: 'Akhir', status: 'pending' as const, scheduledTime: '07:30 AM (Hari 2)' },
 
       // 7.30 PAGI — Acara Padang: Lontar Peluru (Tahun 6, 5, 4) & Lompat Jauh (Tahun 6, 5)
       { id: 'ev-31', code: 'B01', eventName: 'Lontar Peluru', category: 'Tahun 6 Perempuan', type: 'field' as const, stage: 'Akhir', status: 'pending' as const, scheduledTime: '07:30 AM (Hari 2)' },
@@ -186,7 +200,19 @@ export default class extends BaseSeeder {
     await Event.query().whereNotIn('id', eventsData.map((e) => e.id)).delete()
 
     for (const ev of eventsData) {
-      await Event.updateOrCreate({ id: ev.id }, ev)
+      const existing = await Event.find(ev.id)
+      if (!existing) {
+        await Event.create(ev)
+      } else {
+        await Event.query().where('id', ev.id).update({
+          code: ev.code,
+          eventName: ev.eventName,
+          category: ev.category,
+          type: ev.type,
+          stage: ev.stage,
+          scheduledTime: ev.scheduledTime,
+        })
+      }
     }
 
     // 3. Seed 293 Real SK Beringis Athletes

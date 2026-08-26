@@ -52,5 +52,5 @@ USER node
 EXPOSE 3333
 
 ENTRYPOINT ["dumb-init", "--"]
-CMD ["sh", "-c", "node ace migration:run --force && node ace db:seed && node bin/server.js"]
+CMD ["sh", "-c", "node ace migration:run --force && node bin/server.js"]
 
