@@ -272,7 +272,7 @@ export function computeAthleteStandings(
                   : 0
 
         // Find all assigned athletes of this winning house matching category & cohort
-        const matchingAthletes = registeredAthletes.filter((ath) => {
+        const matchingAthletesRaw = registeredAthletes.filter((ath) => {
           if (ath.houseId.toLowerCase() !== res.houseId.toLowerCase()) return false
 
           // Match gender if category is gender-specific
@@ -289,6 +289,11 @@ export function computeAthleteStandings(
           return ath.events && ath.events.some((eStr) => isAthleteRegisteredForEvent(eStr, ev.eventName))
         })
 
+        // Ensure unique athletes only (prevent duplicate registrations from multiplying medals)
+        const matchingAthletes = Array.from(
+          new Map(matchingAthletesRaw.map((a) => [a.name.trim().toLowerCase(), a])).values()
+        )
+
         // Award medals and points to every assigned athlete
         matchingAthletes.forEach((athReg) => {
           const detectedYear = (getAthleteYear(athReg.class) as CohortYear) || evYear
@@ -300,6 +305,12 @@ export function computeAthleteStandings(
             athReg.class,
             athReg.bib
           )
+
+          // Avoid awarding the same event twice to the same athlete
+          const alreadyAwarded = ath.eventsJoined.some(
+            (ej) => (ev.code && ej.eventCode === ev.code) || (ej.eventName === ev.eventName && ej.category === ev.category)
+          )
+          if (alreadyAwarded) return
 
           if (place === 1) {
             ath.gold += 1
@@ -365,6 +376,12 @@ export function computeAthleteStandings(
           res.bib || regMatch?.bib
         )
 
+        // Avoid awarding the same event twice to the same athlete
+        const alreadyAwarded = ath.eventsJoined.some(
+          (ej) => (ev.code && ej.eventCode === ev.code) || (ej.eventName === ev.eventName && ej.category === ev.category)
+        )
+        if (alreadyAwarded) return
+
         const points =
           typeof res.points === 'number'
             ? res.points
@@ -409,12 +426,16 @@ export function computeAthleteStandings(
     }
   })
 
-  // Sort Helper: Gold > Silver > Bronze > Broken Records > Total Points
+  // Sort Helper: Prioritize Individual Medals over Relay/Group Medals for Anugerah Khas & Harapan
+  // 1. Individual Gold > 2. Individual Silver > 3. Individual Bronze > 4. Broken Records > 5. Group Gold > 6. Group Silver > 7. Group Bronze > 8. Total Points
   const sortAthletes = (a: AthleteStanding, b: AthleteStanding) => {
-    if (b.gold !== a.gold) return b.gold - a.gold
-    if (b.silver !== a.silver) return b.silver - a.silver
-    if (b.bronze !== a.bronze) return b.bronze - a.bronze
+    if (b.individualGold !== a.individualGold) return b.individualGold - a.individualGold
+    if (b.individualSilver !== a.individualSilver) return b.individualSilver - a.individualSilver
+    if (b.individualBronze !== a.individualBronze) return b.individualBronze - a.individualBronze
     if (b.brokenRecordsCount !== a.brokenRecordsCount) return b.brokenRecordsCount - a.brokenRecordsCount
+    if (b.groupGold !== a.groupGold) return b.groupGold - a.groupGold
+    if (b.groupSilver !== a.groupSilver) return b.groupSilver - a.groupSilver
+    if (b.groupBronze !== a.groupBronze) return b.groupBronze - a.groupBronze
     return b.totalPoints - a.totalPoints
   }
 

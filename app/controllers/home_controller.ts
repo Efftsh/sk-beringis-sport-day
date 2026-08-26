@@ -21,15 +21,34 @@ export default class HomeController {
     // 2. Fetch live athletes from Database
     const dbAthletes = await Athlete.query().orderBy('id', 'asc')
 
-    const registeredAthletes = dbAthletes.map((ath) => ({
-      id: ath.id,
-      name: ath.name,
-      class: ath.className,
-      gender: ath.gender,
-      houseId: ath.houseId,
-      bib: ath.bib,
-      events: ath.eventsJson || [],
-    }))
+    const seenAthletes = new Set<string>()
+    const registeredAthletes: Array<{
+      id: string
+      name: string
+      class: string
+      gender: string
+      houseId: string
+      bib: string
+      events: string[]
+    }> = []
+
+    for (const ath of dbAthletes) {
+      const cleanName = ath.name.trim()
+      if (!cleanName || cleanName.startsWith('*')) continue
+      const key = `${ath.houseId}:${cleanName.toLowerCase()}`
+      if (!seenAthletes.has(key)) {
+        seenAthletes.add(key)
+        registeredAthletes.push({
+          id: ath.id,
+          name: ath.name,
+          class: ath.className,
+          gender: ath.gender,
+          houseId: ath.houseId,
+          bib: ath.bib,
+          events: ath.eventsJson || [],
+        })
+      }
+    }
 
     const houses = dbHouses.map((h) => ({
       id: h.id,

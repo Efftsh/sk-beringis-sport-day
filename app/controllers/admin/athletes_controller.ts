@@ -92,9 +92,21 @@ export default class AthletesController {
       }
 
       for (const ath of parsedAthletes) {
-        await Athlete.updateOrCreate(
-          { id: ath.id },
-          {
+        const existing = await Athlete.query()
+          .whereRaw('LOWER(TRIM(name)) = ?', [ath.name.trim().toLowerCase()])
+          .where('houseId', ath.houseId)
+          .first()
+
+        if (existing) {
+          existing.merge({
+            className: ath.class,
+            gender: ath.gender,
+            bib: ath.bib || existing.bib,
+            eventsJson: ath.events,
+          })
+          await existing.save()
+        } else {
+          await Athlete.create({
             id: ath.id,
             name: ath.name,
             className: ath.class,
@@ -102,8 +114,8 @@ export default class AthletesController {
             houseId: ath.houseId,
             bib: ath.bib,
             eventsJson: ath.events,
-          }
-        )
+          })
+        }
       }
 
       const houseName = parsedAthletes[0]?.houseId.toUpperCase() || 'SUKAN'
@@ -127,9 +139,21 @@ export default class AthletesController {
   async syncExcel({ response, session }: HttpContext) {
     const allAthletes = ExcelImporterService.getAllAthletes()
     for (const ath of allAthletes) {
-      await Athlete.updateOrCreate(
-        { id: ath.id },
-        {
+      const existing = await Athlete.query()
+        .whereRaw('LOWER(TRIM(name)) = ?', [ath.name.trim().toLowerCase()])
+        .where('houseId', ath.houseId)
+        .first()
+
+      if (existing) {
+        existing.merge({
+          className: ath.class,
+          gender: ath.gender,
+          bib: ath.bib || existing.bib,
+          eventsJson: ath.events,
+        })
+        await existing.save()
+      } else {
+        await Athlete.create({
           id: ath.id,
           name: ath.name,
           className: ath.class,
@@ -137,8 +161,8 @@ export default class AthletesController {
           houseId: ath.houseId,
           bib: ath.bib,
           eventsJson: ath.events,
-        }
-      )
+        })
+      }
     }
 
     session.flash('notification', {

@@ -155,4 +155,93 @@ test.group('Group Relay Events & House Scoring Logic (4x50m, 4x100m, 4x200m)', (
       assert.include(e.scheduledTime, 'Hari 1', `${e.code} (${e.category}) must only be scheduled on Hari 1`)
     })
   })
+
+  test('prioritizes individual medals over group/relay medals for #1 spot in Anugerah Khas & Harapan', ({ assert }) => {
+    const completedEvents = [
+      // Individual Event: 100m
+      {
+        code: 'B01',
+        eventName: '100 meter',
+        category: 'Tahun 6 Lelaki',
+        stage: 'Akhir',
+        results: [
+          { place: 1, houseId: 'merah', athleteName: 'Muhammad Danish', points: 7 },
+          { place: 2, houseId: 'kuning', athleteName: 'Zulhilmi Hakim', points: 5 },
+        ],
+      },
+      // Individual Event: Lompat Jauh
+      {
+        code: 'B02',
+        eventName: 'Lompat Jauh',
+        category: 'Tahun 6 Lelaki',
+        stage: 'Akhir',
+        results: [
+          { place: 1, houseId: 'merah', athleteName: 'Muhammad Danish', points: 7 },
+        ],
+      },
+      // Relay 4x100m (Won by Biru)
+      {
+        code: 'A30',
+        eventName: '4x100 meter',
+        category: 'Tahun 6 Lelaki',
+        stage: 'Akhir',
+        results: [
+          { place: 1, houseId: 'biru', points: 10 },
+        ],
+      },
+      // Relay 4x200m (Won by Biru)
+      {
+        code: 'A31',
+        eventName: '4x200 meter',
+        category: 'Tahun 6 Lelaki',
+        stage: 'Akhir',
+        results: [
+          { place: 1, houseId: 'biru', points: 10 },
+        ],
+      },
+    ]
+
+    const registeredAthletes = [
+      // Danish (Merah): 2 Individual Golds (100m, Lompat Jauh) = 2 Gold, 0 Relay
+      {
+        id: 'ath-1',
+        name: 'Muhammad Danish',
+        class: '6 INOVATIF',
+        gender: 'Lelaki',
+        houseId: 'merah',
+        events: ['100 M [Individu - Utama]', 'Lompat Jauh [Individu - Utama]'],
+      },
+      // Faiz (Biru): 0 Individual Gold, 2 Relay Golds (4x100m, 4x200m) = 2 Gold, 20 pts
+      {
+        id: 'ath-2',
+        name: 'Ahmad Faiz',
+        class: '6 KREATIF',
+        gender: 'Lelaki',
+        houseId: 'biru',
+        events: ['4 x 100 M [Kumpulan - Utama]', '4 x 200 M [Kumpulan - Utama]'],
+      },
+      // Zulhilmi (Kuning): 1 Individual Silver (100m)
+      {
+        id: 'ath-3',
+        name: 'Zulhilmi Hakim',
+        class: '6 DEDIKASI',
+        gender: 'Lelaki',
+        houseId: 'kuning',
+        events: ['100 M [Individu - Utama]'],
+      },
+    ]
+
+    const standings = calculateAthleteStandings(completedEvents, registeredAthletes)
+
+    // Check Danish is #1 even if Faiz has more total points (20 vs 14) because Danish has 2 Individual Golds
+    assert.equal(standings[0].name, 'Muhammad Danish', 'Individual gold medalist must take #1 spot')
+    assert.equal(standings[0].individualGold, 2)
+    assert.equal(standings[0].groupGold, 0)
+
+    // Faiz has 0 individual gold but 2 group gold
+    const faizIndex = standings.findIndex((a) => a.name === 'Ahmad Faiz')
+    assert.isAbove(faizIndex, 0, 'Relay-only gold medalist must rank below individual gold medalist')
+    assert.equal(standings[faizIndex].individualGold, 0)
+    assert.equal(standings[faizIndex].groupGold, 2)
+  })
 })
