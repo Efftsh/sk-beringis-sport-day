@@ -1,5 +1,5 @@
 import { test } from '@japa/runner'
-import { isGroupEvent } from '#services/event_matcher_service'
+import { isGroupEvent, calculateAthleteStandings } from '#services/event_matcher_service'
 
 test.group('Group Relay Events & House Scoring Logic (4x50m, 4x100m, 4x200m)', () => {
   test('accurately identifies 4x50m, 4x100m, 4x200m, and sukaneka as group events', ({ assert }) => {
@@ -52,19 +52,23 @@ test.group('Group Relay Events & House Scoring Logic (4x50m, 4x100m, 4x200m)', (
     assert.equal(houseScores['hijau'].points, 0)
   })
 
-  test('ensures group event house standings do not pollute individual athlete award rosters', ({ assert }) => {
+  test('accurately distributes relay medals (4x50, 4x100, 4x200) to assigned house athletes for Anugerah Khas & Harapan', ({ assert }) => {
     const completedEvents = [
       {
+        code: 'A30',
         eventName: '4x100 meter',
         category: 'Tahun 6 Lelaki',
+        stage: 'Akhir',
         results: [
-          { place: 1, houseId: 'merah', athleteName: 'Rumah Merah', points: 10 },
-          { place: 2, houseId: 'biru', athleteName: 'Rumah Biru', points: 7 },
+          { place: 1, houseId: 'merah', points: 10 },
+          { place: 2, houseId: 'biru', points: 7 },
         ],
       },
       {
+        code: 'B22',
         eventName: '100 meter',
         category: 'Tahun 6 Lelaki',
+        stage: 'Akhir',
         results: [
           { place: 1, houseId: 'merah', athleteName: 'Muhammad Danish', points: 7 },
           { place: 2, houseId: 'biru', athleteName: 'Rayyan Mikhail', points: 5 },
@@ -72,21 +76,63 @@ test.group('Group Relay Events & House Scoring Logic (4x50m, 4x100m, 4x200m)', (
       },
     ]
 
-    const individualAthletes: string[] = []
+    const registeredAthletes = [
+      {
+        id: 'ath-1',
+        name: 'Muhammad Danish',
+        class: '6 INOVATIF',
+        gender: 'Lelaki',
+        houseId: 'merah',
+        events: ['100 M [Individu - Utama]', '4 x 100 M [Kumpulan - Utama]'],
+      },
+      {
+        id: 'ath-2',
+        name: 'Ahmad Faiz',
+        class: '6 KREATIF',
+        gender: 'Lelaki',
+        houseId: 'merah',
+        events: ['4 x 100 M [Kumpulan - Utama]'],
+      },
+      {
+        id: 'ath-3',
+        name: 'Rayyan Mikhail',
+        class: '6 INTERAKTIF',
+        gender: 'Lelaki',
+        houseId: 'biru',
+        events: ['100 M [Individu - Utama]', '4 x 100 M [Kumpulan - Utama]'],
+      },
+    ]
 
-    completedEvents.forEach((ev) => {
-      if (isGroupEvent(ev.eventName)) return // Exclude relay/group events
+    const standings = calculateAthleteStandings(completedEvents, registeredAthletes)
 
-      ev.results.forEach((r) => {
-        if (!r.athleteName.toLowerCase().startsWith('rumah ')) {
-          individualAthletes.push(r.athleteName)
-        }
-      })
-    })
+    // Muhammad Danish won 100m (Gold, 7 pts) + 4x100m relay (Gold, 10 pts) = 2 Gold, 17 pts
+    const danish = standings.find((a) => a.name === 'Muhammad Danish')
+    assert.isDefined(danish)
+    assert.equal(danish!.gold, 2, 'Danish gets 2 Gold medals (1 Individu + 1 Kumpulan)')
+    assert.equal(danish!.individualGold, 1)
+    assert.equal(danish!.groupGold, 1)
+    assert.equal(danish!.totalPoints, 17)
+    assert.equal(danish!.eventsJoined.length, 2)
+    assert.isFalse(danish!.eventsJoined[1].isGroup, '100m is individual')
+    assert.equal(danish!.eventsJoined[1].eventType, 'Individu')
+    assert.isTrue(danish!.eventsJoined[0].isGroup, '4x100m is group/relay')
+    assert.equal(danish!.eventsJoined[0].eventType, 'Kumpulan')
 
-    assert.deepEqual(individualAthletes, ['Muhammad Danish', 'Rayyan Mikhail'])
-    assert.notInclude(individualAthletes, 'Rumah Merah')
-    assert.notInclude(individualAthletes, 'Rumah Biru')
+    // Ahmad Faiz only ran 4x100m relay (Gold, 10 pts)
+    const faiz = standings.find((a) => a.name === 'Ahmad Faiz')
+    assert.isDefined(faiz)
+    assert.equal(faiz!.gold, 1)
+    assert.equal(faiz!.groupGold, 1)
+    assert.equal(faiz!.individualGold, 0)
+    assert.equal(faiz!.totalPoints, 10)
+
+    // Rayyan Mikhail got 2nd in 100m (Silver, 5 pts) + 2nd in 4x100m (Silver, 7 pts) = 2 Silver, 12 pts
+    const rayyan = standings.find((a) => a.name === 'Rayyan Mikhail')
+    assert.isDefined(rayyan)
+    assert.equal(rayyan!.silver, 2)
+    assert.equal(rayyan!.individualSilver, 1)
+    assert.equal(rayyan!.groupSilver, 1)
+    assert.equal(rayyan!.totalPoints, 12)
   })
 
   test('confirms 4x100m relay events are scheduled on Hari 1 (Day 1) and 4x50m on Hari 2', ({ assert }) => {

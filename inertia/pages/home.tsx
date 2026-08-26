@@ -1,22 +1,16 @@
 import type { FC } from 'react'
 import { useState, useMemo } from 'react'
 import { Head } from '@inertiajs/react'
-import {
-  Trophy,
-  Crown,
-  BookOpen,
-  Award,
-  Menu,
-  X,
-  ChevronDown,
-  Check,
-  Compass,
-} from 'lucide-react'
+import { Trophy, Crown, BookOpen, Award, Menu, X, ChevronDown, Check, Compass } from 'lucide-react'
 import LiveHeaderBanner from '../components/public/LiveHeaderBanner'
-import PublicLeaderboardTab, { HouseItem, EventRecord } from '../components/public/PublicLeaderboardTab'
+import PublicLeaderboardTab, {
+  HouseItem,
+  EventRecord,
+} from '../components/public/PublicLeaderboardTab'
 import PublicEventsResultsTab from '../components/public/PublicEventsResultsTab'
 import PublicSpecialAwardsTab from '../components/public/PublicSpecialAwardsTab'
 import PublicProgramBookTab from '../components/public/PublicProgramBookTab'
+import ThemeToggle from '../components/theme_toggle'
 
 export type HomeProps = Record<string, any> & {
   championshipInfo?: {
@@ -59,7 +53,9 @@ export const Home: FC<HomeProps> = ({
   registeredAthletes = [],
   totalAthletes = 0,
 }) => {
-  const [activeTab, setActiveTab] = useState<'leaderboard' | 'events' | 'awards' | 'booklet'>('leaderboard')
+  const [activeTab, setActiveTab] = useState<'leaderboard' | 'events' | 'awards' | 'booklet'>(
+    'leaderboard'
+  )
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false)
 
   // Derived counts
@@ -162,10 +158,7 @@ export const Home: FC<HomeProps> = ({
         </div>
 
         {/* 2. Mobile Burger Switcher Trigger Card */}
-        <div
-          className="public-mobile-tab-trigger"
-          onClick={() => setIsMobileMenuOpen(true)}
-        >
+        <div className="public-mobile-tab-trigger" onClick={() => setIsMobileMenuOpen(true)}>
           <div style={{ display: 'flex', alignItems: 'center', gap: '10px', minWidth: 0 }}>
             <div
               style={{
@@ -184,10 +177,27 @@ export const Home: FC<HomeProps> = ({
             </div>
 
             <div style={{ minWidth: 0 }}>
-              <div style={{ fontSize: '10px', fontWeight: 800, color: '#64748b', textTransform: 'uppercase', letterSpacing: '0.5px' }}>
+              <div
+                style={{
+                  fontSize: '10px',
+                  fontWeight: 800,
+                  color: '#64748b',
+                  textTransform: 'uppercase',
+                  letterSpacing: '0.5px',
+                }}
+              >
                 MENU PAPARAN AKTIF:
               </div>
-              <div style={{ fontSize: '14px', fontWeight: 900, color: '#0f172a', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
+              <div
+                style={{
+                  fontSize: '14px',
+                  fontWeight: 900,
+                  color: '#0f172a',
+                  whiteSpace: 'nowrap',
+                  overflow: 'hidden',
+                  textOverflow: 'ellipsis',
+                }}
+              >
                 {currentTab.label}
               </div>
             </div>
@@ -217,10 +227,7 @@ export const Home: FC<HomeProps> = ({
 
       {/* 3. Mobile Slide-Up Burger Menu Sheet */}
       {isMobileMenuOpen && (
-        <div
-          className="mobile-sheet-overlay"
-          onClick={() => setIsMobileMenuOpen(false)}
-        >
+        <div className="mobile-sheet-overlay" onClick={() => setIsMobileMenuOpen(false)}>
           <div
             className="mobile-sheet-content"
             onClick={(e) => e.stopPropagation()}
@@ -352,6 +359,26 @@ export const Home: FC<HomeProps> = ({
                 )
               })}
             </div>
+
+            {/* Mobile Sheet Theme Toggle Section */}
+            <div
+              style={{
+                marginTop: '16px',
+                paddingTop: '14px',
+                borderTop: '1px solid #f1f5f9',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'space-between',
+              }}
+            >
+              <div>
+                <div style={{ fontSize: '13px', fontWeight: 800, color: '#0f172a' }}>
+                  Tema Paparan
+                </div>
+                <div style={{ fontSize: '11px', color: '#64748b' }}>Tukar mod cerah atau gelap</div>
+              </div>
+              <ThemeToggle variant="pill" />
+            </div>
           </div>
         </div>
       )}
@@ -359,32 +386,20 @@ export const Home: FC<HomeProps> = ({
       {/* Tab Contents */}
       <div style={{ width: '100%' }}>
         {activeTab === 'leaderboard' && (
-          <PublicLeaderboardTab
-            houses={houses}
-            events={eventsList}
-            totalAthletes={totalAthletes}
-          />
+          <PublicLeaderboardTab houses={houses} events={eventsList} totalAthletes={totalAthletes} />
         )}
 
-        {activeTab === 'events' && (
-          <PublicEventsResultsTab
-            events={eventsList}
-            houses={houses}
-          />
-        )}
+        {activeTab === 'events' && <PublicEventsResultsTab events={eventsList} houses={houses} />}
 
         {activeTab === 'awards' && (
           <PublicSpecialAwardsTab
             events={eventsList}
             houses={houses}
+            registeredAthletes={registeredAthletes}
           />
         )}
 
-        {activeTab === 'booklet' && (
-          <PublicProgramBookTab
-            url={championshipInfo.eBookletUrl}
-          />
-        )}
+        {activeTab === 'booklet' && <PublicProgramBookTab url={championshipInfo.eBookletUrl} />}
       </div>
 
       {/* Footer & Admin Gateway */}
@@ -431,4 +446,3 @@ export const Home: FC<HomeProps> = ({
 }
 
 export default Home
-

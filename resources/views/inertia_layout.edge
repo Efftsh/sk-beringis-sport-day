@@ -7,6 +7,21 @@
       AdonisJS
     </title>
 
+    <script>
+      (function() {
+        try {
+          var stored = localStorage.getItem('sk_beringis_theme');
+          var prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+          if (stored === 'dark' || (!stored && prefersDark)) {
+            document.documentElement.classList.add('dark');
+            document.documentElement.setAttribute('data-theme', 'dark');
+          } else {
+            document.documentElement.classList.remove('dark');
+            document.documentElement.setAttribute('data-theme', 'light');
+          }
+        } catch (e) {}
+      })();
+    </script>
     @viteReactRefresh()
     @vite(['inertia/app.tsx'])
     @inertiaHead()

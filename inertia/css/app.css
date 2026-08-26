@@ -1682,3 +1682,340 @@ button:hover {
   min-height: 44px;
   min-width: 44px;
 }
+
+/* ==========================================================================
+   DARK MODE THEME SYSTEM (SK BERINGIS CHAMPIONSHIP PORTAL)
+   ========================================================================== */
+
+/* Theme Toggle Button Micro-Interactions */
+.theme-toggle-btn {
+  transition: transform 0.2s cubic-bezier(0.34, 1.56, 0.64, 1), background-color 0.2s ease, border-color 0.2s ease;
+}
+.theme-toggle-btn:hover {
+  transform: scale(1.06);
+}
+.theme-toggle-btn:active {
+  transform: scale(0.95);
+}
+
+.theme-toggle-pill {
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+}
+.theme-toggle-pill:hover {
+  filter: brightness(1.12);
+  transform: translateY(-1px);
+}
+.theme-toggle-pill:active {
+  transform: scale(0.97);
+}
+
+.theme-icon-sun {
+  animation: theme-spin-in 0.35s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+.theme-icon-moon {
+  animation: theme-pop-in 0.35s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+@keyframes theme-spin-in {
+  from {
+    transform: rotate(-120deg) scale(0.4);
+    opacity: 0;
+  }
+  to {
+    transform: rotate(0deg) scale(1);
+    opacity: 1;
+  }
+}
+
+@keyframes theme-pop-in {
+  from {
+    transform: scale(0.4) rotate(45deg);
+    opacity: 0;
+  }
+  to {
+    transform: scale(1) rotate(0deg);
+    opacity: 1;
+  }
+}
+
+/* Dark Mode Variables & Colors */
+html.dark,
+[data-theme='dark'] {
+  color-scheme: dark;
+  --mint-bg: #090d16;
+  --forest-green: #1a4d3b;
+  --forest-hover: #133a2d;
+  --panel-bg: #151d2c;
+  --card-bg: #151d2c;
+  --border-color: #2e3b52;
+  --text-main: #f8fafc;
+  --text-muted: #94a3b8;
+  --admin-bg: #090d16;
+
+  --gray-1: #0b0f19;
+  --gray-2: #131b2e;
+  --gray-3: #1e293b;
+  --gray-4: #334155;
+  --gray-6: #94a3b8;
+  --gray-7: #cbd5e1;
+  --gray-8: #e2e8f0;
+  --gray-10: #f1f5f9;
+  --gray-12: #ffffff;
+}
+
+/* Smooth Global Transitions */
+html,
+body,
+header,
+main,
+.dashboard-content-panel,
+.dashboard-sidebar,
+.overview-card,
+.public-desktop-tab-bar,
+.public-tab-btn,
+.public-mobile-tab-trigger,
+.mobile-sheet-content,
+.form-container,
+.roster-table th,
+.roster-table td,
+input,
+select,
+textarea {
+  transition: background-color 0.25s ease, border-color 0.25s ease, color 0.25s ease, box-shadow 0.25s ease;
+}
+
+/* Dark Mode Global Overrides */
+html.dark body {
+  background-color: #090d16;
+  color: #f1f5f9;
+}
+
+html.dark header {
+  background: #0d1e18;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
+}
+
+html.dark main {
+  background: #0f172a;
+  border-color: #1e293b;
+  box-shadow: 0 16px 40px rgba(0, 0, 0, 0.6);
+}
+
+html.dark h1,
+html.dark h2,
+html.dark h3,
+html.dark h4,
+html.dark h5,
+html.dark h6 {
+  color: #f8fafc;
+}
+
+html.dark .form-container {
+  background: #151d2c;
+  border-color: #334155;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
+}
+
+html.dark .cards > div {
+  background: #151d2c;
+  border-color: #334155;
+}
+
+html.dark input,
+html.dark textarea,
+html.dark select {
+  background-color: #1e293b;
+  color: #f8fafc;
+  border-color: #475569;
+}
+
+html.dark input:focus,
+html.dark textarea:focus,
+html.dark select:focus {
+  border-color: #34d399;
+  box-shadow: 0 0 0 2px rgba(52, 211, 153, 0.2);
+}
+
+html.dark label {
+  color: #cbd5e1;
+}
+
+/* Public Desktop & Mobile Navigation */
+html.dark .public-desktop-tab-bar {
+  background: #151d2c;
+  border-color: #2e3b52;
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.35);
+}
+
+html.dark .public-tab-btn {
+  background: #1e293b;
+  color: #cbd5e1;
+  border-color: #2e3b52;
+}
+
+html.dark .public-tab-btn:hover {
+  background: #283850;
+  border-color: #475569;
+  color: #ffffff;
+}
+
+html.dark .public-tab-btn.active {
+  background: #1e5643;
+  color: #ffffff;
+  border-color: #2d7a5f;
+  box-shadow: 0 4px 14px rgba(45, 122, 95, 0.4);
+}
+
+html.dark .public-mobile-tab-trigger {
+  background: #151d2c;
+  border-color: #2e3b52;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+}
+
+html.dark .mobile-sheet-content {
+  background: #131b2e;
+  border: 1px solid #2e3b52;
+  box-shadow: 0 24px 50px rgba(0, 0, 0, 0.7);
+}
+
+/* Dark Mode Components & Cards */
+html.dark .overview-card,
+html.dark .dashboard-container-card {
+  background: #131b2e;
+  border-color: #2e3b52;
+}
+
+html.dark .dashboard-content-panel {
+  background: #090d16;
+}
+
+html.dark .dashboard-sidebar {
+  background: #0b1813;
+  border-right: 1px solid #1c2e26;
+}
+
+html.dark .search-input-field {
+  background: #151d2c;
+  border-color: #2e3b52;
+  color: #f8fafc;
+}
+
+html.dark .notification-bell-box {
+  background: #151d2c;
+  border-color: #2e3b52;
+  color: #f8fafc;
+}
+
+html.dark .chart-time-badge {
+  background: rgba(45, 122, 95, 0.25);
+  color: #6ee7b7;
+}
+
+/* Dark Mode Tables */
+html.dark .roster-table-container,
+html.dark .responsive-table-wrap {
+  border-color: #2e3b52;
+}
+
+html.dark .roster-table th {
+  background: #172238;
+  color: #94a3b8;
+  border-bottom-color: #2e3b52;
+}
+
+html.dark .roster-table td {
+  background: #131b2e;
+  color: #e2e8f0;
+  border-bottom-color: #1e293b;
+}
+
+html.dark .events-checklist-box {
+  background: #0f172a;
+  border-color: #2e3b52;
+}
+
+html.dark .event-check-item {
+  background: #151d2c;
+  border-color: #2e3b52;
+  color: #e2e8f0;
+}
+
+html.dark .event-check-item.checked {
+  background: rgba(45, 122, 95, 0.25);
+  border-color: #10b981;
+  color: #6ee7b7;
+}
+
+/* Universal Dark Mode Overrides for Inlined Light Colors */
+html.dark div[style*="background: #ffffff"],
+html.dark div[style*="background: rgb(255, 255, 255)"],
+html.dark div[style*="backgroundColor: '#ffffff'"],
+html.dark div[style*="backgroundColor: #ffffff"],
+html.dark section[style*="background: #ffffff"] {
+  background-color: #131b2e !important;
+  border-color: #2e3b52 !important;
+}
+
+html.dark div[style*="background: #f8fafc"],
+html.dark div[style*="background: rgb(248, 250, 252)"],
+html.dark div[style*="backgroundColor: '#f8fafc'"],
+html.dark span[style*="background: #f8fafc"] {
+  background-color: #172238 !important;
+  border-color: #2e3b52 !important;
+}
+
+html.dark div[style*="background: #f1f5f9"],
+html.dark div[style*="backgroundColor: '#f1f5f9'"] {
+  background-color: #1a273f !important;
+  border-color: #2e3b52 !important;
+}
+
+html.dark div[style*="color: #0f172a"],
+html.dark span[style*="color: #0f172a"],
+html.dark h1[style*="color: #0f172a"],
+html.dark h2[style*="color: #0f172a"],
+html.dark h3[style*="color: #0f172a"],
+html.dark h4[style*="color: #0f172a"] {
+  color: #f8fafc !important;
+}
+
+html.dark div[style*="color: #334155"],
+html.dark span[style*="color: #334155"],
+html.dark p[style*="color: #334155"],
+html.dark label[style*="color: #334155"] {
+  color: #cbd5e1 !important;
+}
+
+html.dark div[style*="color: #475569"],
+html.dark span[style*="color: #475569"],
+html.dark p[style*="color: #475569"] {
+  color: #94a3b8 !important;
+}
+
+html.dark div[style*="border: 1px solid #e2e8f0"],
+html.dark div[style*="border: 1px solid #cbd5e1"],
+html.dark div[style*="border-color: #e2e8f0"],
+html.dark div[style*="border-color: #cbd5e1"] {
+  border-color: #2e3b52 !important;
+}
+
+/* Custom Scrollbars in Dark Mode */
+html.dark ::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+html.dark ::-webkit-scrollbar-track {
+  background: #0f172a;
+}
+
+html.dark ::-webkit-scrollbar-thumb {
+  background: #334155;
+  border-radius: 4px;
+}
+
+html.dark ::-webkit-scrollbar-thumb:hover {
+  background: #475569;
+}
+

@@ -34,12 +34,11 @@ export function getEventDay(eventName: string, _stage: string, category: string,
   const cat = category.toLowerCase()
 
   // Hari 1: Rabu, 26 Ogos 2026
-  // - Acara Padang: Lompat Jauh (Tahun 3 & 4), Lompat Tinggi (Tahun 4, 5, 6)
+  // - Acara Padang: Lompat Jauh (Tahun 3 & 4)
   // - 200m (Saringan & Akhir) Tahun 4, 5, 6
   // - 4x100m (Akhir) Tahun 3, 4, 5, 6
   if (
     (name.includes('lompat jauh') && (cat.includes('tahun 3') || cat.includes('tahun 4') || cat.includes('thn 3') || cat.includes('thn 4'))) ||
-    name.includes('lompat tinggi') ||
     (name.includes('200') && !name.includes('4x200') && !name.includes('4 x 200')) ||
     name.includes('4x100') ||
     name.includes('4 x 100')
@@ -50,11 +49,13 @@ export function getEventDay(eventName: string, _stage: string, category: string,
   // Hari 2: Khamis, 27 Ogos 2026
   // - Lontar Peluru (Tahun 4, 5, 6)
   // - Lompat Jauh (Tahun 5 & 6)
+  // - Lompat Tinggi (Tahun 4, 5, 6)
   // - 80m (Akhir) Tahun 1 & 2
   // - 100m (Akhir) Tahun 3, 4, 5, 6
   // - 4x50m (Akhir) Tahun 1 & 2
   if (
     name.includes('lontar peluru') ||
+    name.includes('lompat tinggi') ||
     (name.includes('lompat jauh') && (cat.includes('tahun 5') || cat.includes('tahun 6') || cat.includes('thn 5') || cat.includes('thn 6'))) ||
     name.includes('80') ||
     (name.includes('100') && !name.includes('4x100') && !name.includes('4 x 100')) ||
@@ -890,15 +891,15 @@ export default function PublicEventsResultsTab({
                         )}
                       </div>
 
-                      <div style={{ display: 'flex', gap: '5px', alignItems: 'center', marginTop: '4px', flexWrap: 'wrap' }}>
+                      <div style={{ display: 'flex', gap: '6px', alignItems: 'center', marginTop: '6px', flexWrap: 'wrap' }}>
                         <span
                           style={{
                             background: dayBadgeBg,
                             color: dayBadgeColor,
-                            fontSize: '10px',
+                            fontSize: '13px',
                             fontWeight: 800,
-                            padding: '1px 6px',
-                            borderRadius: '4px',
+                            padding: '3px 8px',
+                            borderRadius: '6px',
                           }}
                         >
                           {dayLabel}
@@ -907,11 +908,11 @@ export default function PublicEventsResultsTab({
                         <span
                           style={{
                             background: '#f1f5f9',
-                            color: '#475569',
-                            fontSize: '11px',
-                            fontWeight: 700,
-                            padding: '1px 6px',
-                            borderRadius: '4px',
+                            color: '#334155',
+                            fontSize: '13px',
+                            fontWeight: 800,
+                            padding: '3px 8px',
+                            borderRadius: '6px',
                           }}
                         >
                           {ev.category}
@@ -921,16 +922,16 @@ export default function PublicEventsResultsTab({
                           style={{
                             background: ev.type === 'track' ? '#eff6ff' : '#fdf2f8',
                             color: ev.type === 'track' ? '#2563eb' : '#db2777',
-                            fontSize: '11px',
-                            fontWeight: 700,
-                            padding: '1px 6px',
-                            borderRadius: '4px',
+                            fontSize: '13px',
+                            fontWeight: 800,
+                            padding: '3px 8px',
+                            borderRadius: '6px',
                           }}
                         >
                           {ev.type === 'track' ? 'Balapan' : 'Padang'}
                         </span>
 
-                        <span style={{ fontSize: '11px', color: '#64748b', fontWeight: 600 }}>
+                        <span style={{ fontSize: '13px', color: '#475569', fontWeight: 700 }}>
                           ⏱️ {ev.scheduledTime}
                         </span>
                       </div>
@@ -944,19 +945,19 @@ export default function PublicEventsResultsTab({
                         style={{
                           display: 'flex',
                           alignItems: 'center',
-                          gap: '6px',
+                          gap: '8px',
                           background: winnerHouse ? winnerHouse.lightBg : '#fef3c7',
-                          border: `1px solid ${winnerHouse ? winnerHouse.color : '#fde68a'}60`,
-                          padding: '4px 10px',
+                          border: `1.5px solid ${winnerHouse ? winnerHouse.color : '#fde68a'}70`,
+                          padding: '6px 12px',
                           borderRadius: '10px',
                         }}
                       >
-                        <span style={{ fontSize: '13px' }}>🥇</span>
+                        <span style={{ fontSize: '16px' }}>🥇</span>
                         <div style={{ textAlign: 'left' }}>
-                          <div style={{ fontSize: '12px', fontWeight: 900, color: '#0f172a', maxWidth: '140px', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
+                          <div style={{ fontSize: '13px', fontWeight: 900, color: '#0f172a', maxWidth: '160px', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
                             {winner.athleteName}
                           </div>
-                          <div style={{ fontSize: '10px', color: winnerHouse?.color || '#b45309', fontWeight: 800 }}>
+                          <div style={{ fontSize: '12px', color: winnerHouse?.color || '#b45309', fontWeight: 800 }}>
                             {winnerHouse?.name || winner.houseId}
                             {winner.recordValue ? ` • ${winner.recordValue}` : ''}
                           </div>
@@ -968,10 +969,10 @@ export default function PublicEventsResultsTab({
                       <span
                         style={{
                           background: '#f1f5f9',
-                          color: '#64748b',
-                          fontSize: '11px',
+                          color: '#475569',
+                          fontSize: '12px',
                           fontWeight: 800,
-                          padding: '4px 10px',
+                          padding: '5px 12px',
                           borderRadius: '8px',
                         }}
                       >
@@ -980,7 +981,7 @@ export default function PublicEventsResultsTab({
                     )}
 
                     <div style={{ color: '#94a3b8' }}>
-                      {isExpanded ? <ChevronUp size={18} /> : <ChevronDown size={18} />}
+                      {isExpanded ? <ChevronUp size={20} /> : <ChevronDown size={20} />}
                     </div>
                   </div>
                 </div>
@@ -990,7 +991,7 @@ export default function PublicEventsResultsTab({
                   <div style={{ padding: 'clamp(12px, 2.5vw, 18px)', background: '#fafbfc' }}>
                     {isCompleted && ev.results && ev.results.length > 0 ? (
                       <div>
-                        <div style={{ fontSize: '11px', fontWeight: 800, color: '#475569', marginBottom: '8px' }}>
+                        <div style={{ fontSize: '12px', fontWeight: 900, color: '#475569', marginBottom: '8px', letterSpacing: '0.3px' }}>
                           KEPUTUSAN RASMI:
                         </div>
 
@@ -1019,7 +1020,7 @@ export default function PublicEventsResultsTab({
                                   background: '#ffffff',
                                   border: `1px solid ${placeBorder}`,
                                   borderRadius: '12px',
-                                  padding: '10px 12px',
+                                  padding: '10px 14px',
                                   display: 'flex',
                                   justifyContent: 'space-between',
                                   alignItems: 'center',
@@ -1028,15 +1029,15 @@ export default function PublicEventsResultsTab({
                                 }}
                               >
                                 <div style={{ minWidth: 0 }}>
-                                  <div style={{ display: 'flex', alignItems: 'center', gap: '6px', marginBottom: '2px', flexWrap: 'wrap' }}>
+                                  <div style={{ display: 'flex', alignItems: 'center', gap: '6px', marginBottom: '3px', flexWrap: 'wrap' }}>
                                     <span
                                       style={{
                                         background: placeBg,
                                         color: placeColor,
-                                        fontSize: '10px',
+                                        fontSize: '11px',
                                         fontWeight: 900,
-                                        padding: '1px 6px',
-                                        borderRadius: '4px',
+                                        padding: '2px 7px',
+                                        borderRadius: '5px',
                                       }}
                                     >
                                       {placeEmoji}
@@ -1046,10 +1047,10 @@ export default function PublicEventsResultsTab({
                                         style={{
                                           background: '#dc2626',
                                           color: '#ffffff',
-                                          fontSize: '9px',
+                                          fontSize: '10px',
                                           fontWeight: 900,
-                                          padding: '1px 5px',
-                                          borderRadius: '4px',
+                                          padding: '2px 6px',
+                                          borderRadius: '5px',
                                         }}
                                       >
                                         🌟 REKOD
@@ -1057,46 +1058,34 @@ export default function PublicEventsResultsTab({
                                     )}
                                   </div>
 
-                                  <div style={{ fontSize: '13px', fontWeight: 900, color: '#0f172a' }}>
+                                  <div style={{ fontSize: '14px', fontWeight: 900, color: '#0f172a' }}>
                                     {res.athleteName}
                                   </div>
 
-                                  <div style={{ display: 'flex', alignItems: 'center', gap: '5px', marginTop: '2px' }}>
+                                  <div style={{ display: 'flex', alignItems: 'center', gap: '6px', marginTop: '3px' }}>
                                     <span
                                       style={{
-                                        width: '8px',
-                                        height: '8px',
+                                        width: '10px',
+                                        height: '10px',
                                         borderRadius: '50%',
                                         backgroundColor: resHouse?.color || '#64748b',
                                       }}
                                     />
-                                    <span style={{ fontSize: '11px', fontWeight: 700, color: resHouse?.color || '#475569' }}>
+                                    <span style={{ fontSize: '13px', fontWeight: 800, color: resHouse?.color || '#334155' }}>
                                       {resHouse?.name || res.houseId}
                                     </span>
                                     {res.bib && (
-                                      <span style={{ fontSize: '10px', color: '#94a3b8', fontWeight: 600 }}>
+                                      <span style={{ fontSize: '11px', color: '#64748b', fontWeight: 700 }}>
                                         (BIB: {res.bib})
                                       </span>
                                     )}
                                   </div>
 
                                   {res.recordValue && (
-                                    <div style={{ fontSize: '11px', color: '#2563eb', fontWeight: 800, marginTop: '2px' }}>
+                                    <div style={{ fontSize: '12px', color: '#2563eb', fontWeight: 800, marginTop: '3px' }}>
                                       Catatan: {res.recordValue}
                                     </div>
                                   )}
-                                </div>
-
-                                <div style={{ textAlign: 'right', flexShrink: 0 }}>
-                                  <span
-                                    style={{
-                                      fontSize: '13px',
-                                      fontWeight: 900,
-                                      color: resHouse?.color || '#0f172a',
-                                    }}
-                                  >
-                                    +{res.points} pts
-                                  </span>
                                 </div>
                               </div>
                             )

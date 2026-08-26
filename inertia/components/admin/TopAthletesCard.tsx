@@ -51,8 +51,8 @@ export default function TopAthletesCard({ topAthletes }: TopAthletesCardProps) {
 
           <div className="athlete-stats-row">
             <div className="athlete-stat-box">
-              <span className="stat-label">Pungutan Mata</span>
-              <span className="stat-number">{olahragawan.points} pts</span>
+              <span className="stat-label">Jumlah Pingat</span>
+              <span className="stat-number">{olahragawan.medals.gold + olahragawan.medals.silver + olahragawan.medals.bronze} Pingat</span>
             </div>
             <div className="athlete-medals-box">
               <span>🥇 {olahragawan.medals.gold}</span>
@@ -85,8 +85,8 @@ export default function TopAthletesCard({ topAthletes }: TopAthletesCardProps) {
 
           <div className="athlete-stats-row">
             <div className="athlete-stat-box">
-              <span className="stat-label">Pungutan Mata</span>
-              <span className="stat-number">{olahragawati.points} pts</span>
+              <span className="stat-label">Jumlah Pingat</span>
+              <span className="stat-number">{olahragawati.medals.gold + olahragawati.medals.silver + olahragawati.medals.bronze} Pingat</span>
             </div>
             <div className="athlete-medals-box">
               <span>🥇 {olahragawati.medals.gold}</span>

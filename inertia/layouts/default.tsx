@@ -4,6 +4,7 @@ import { usePage } from '@inertiajs/react'
 import { type ReactElement, useEffect } from 'react'
 import { Form, Link } from '@adonisjs/inertia/react'
 import { LogOut, LayoutDashboard } from 'lucide-react'
+import ThemeToggle from '../components/theme_toggle'
 
 export default function Layout({ children }: { children: ReactElement<Data.SharedProps> }) {
   const { url, flash } = usePage()
@@ -26,20 +27,45 @@ export default function Layout({ children }: { children: ReactElement<Data.Share
         <div>
           <div>
             <Link route="home" style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-              <div className="school-crest-badge" style={{ background: '#ffffff', border: '1px solid rgba(255,255,255,0.8)', width: '36px', height: '36px', borderRadius: '10px', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0, padding: '2px', boxShadow: '0 2px 6px rgba(0,0,0,0.12)' }}>
+              <div
+                className="school-crest-badge"
+                style={{
+                  background: '#ffffff',
+                  border: '1px solid rgba(255,255,255,0.8)',
+                  width: '36px',
+                  height: '36px',
+                  borderRadius: '10px',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  flexShrink: 0,
+                  padding: '2px',
+                  boxShadow: '0 2px 6px rgba(0,0,0,0.12)',
+                }}
+              >
                 <img
                   src="/images/logo_sk_beringis.png"
                   alt="Logo SK Beringis Papar"
                   style={{ width: '100%', height: '100%', objectFit: 'contain' }}
                 />
               </div>
-              <span className="brand-title" style={{ fontSize: 'clamp(14px, 3.8vw, 18px)', fontWeight: 800, color: '#ffffff', letterSpacing: '-0.3px', whiteSpace: 'nowrap' }}>
+              <span
+                className="brand-title"
+                style={{
+                  fontSize: 'clamp(14px, 3.8vw, 18px)',
+                  fontWeight: 800,
+                  color: '#ffffff',
+                  letterSpacing: '-0.3px',
+                  whiteSpace: 'nowrap',
+                }}
+              >
                 SK BERINGIS PORTAL
               </span>
             </Link>
           </div>
           <div>
-            <nav style={{ gap: '8px' }}>
+            <nav style={{ gap: '8px', display: 'flex', alignItems: 'center' }}>
+              <ThemeToggle variant="pill" />
               {children.props.user ? (
                 <>
                   <Link
@@ -61,37 +87,42 @@ export default function Layout({ children }: { children: ReactElement<Data.Share
                   </Link>
 
                   <div style={{ display: 'inline-flex', alignItems: 'center', gap: '6px' }}>
-                    <div style={{
-                      width: '30px',
-                      height: '30px',
-                      borderRadius: '50%',
-                      background: '#e2f0eb',
-                      color: '#2d7a5f',
-                      fontWeight: 800,
-                      display: 'flex',
-                      alignItems: 'center',
-                      justifyContent: 'center',
-                      fontSize: '11px',
-                      flexShrink: 0
-                    }}>
+                    <div
+                      style={{
+                        width: '30px',
+                        height: '30px',
+                        borderRadius: '50%',
+                        background: '#e2f0eb',
+                        color: '#2d7a5f',
+                        fontWeight: 800,
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                        fontSize: '11px',
+                        flexShrink: 0,
+                      }}
+                    >
                       {children.props.user.initials}
                     </div>
                   </div>
 
                   <Form route="session.destroy">
-                    <button type="submit" style={{
-                      background: 'transparent',
-                      border: '1px solid rgba(226, 240, 235, 0.4)',
-                      borderRadius: '8px',
-                      padding: '5px 8px',
-                      fontSize: '11px',
-                      fontWeight: '700',
-                      display: 'inline-flex',
-                      alignItems: 'center',
-                      gap: '4px',
-                      cursor: 'pointer',
-                      color: '#e2f0eb'
-                    }}>
+                    <button
+                      type="submit"
+                      style={{
+                        background: 'transparent',
+                        border: '1px solid rgba(226, 240, 235, 0.4)',
+                        borderRadius: '8px',
+                        padding: '5px 8px',
+                        fontSize: '11px',
+                        fontWeight: '700',
+                        display: 'inline-flex',
+                        alignItems: 'center',
+                        gap: '4px',
+                        cursor: 'pointer',
+                        color: '#e2f0eb',
+                      }}
+                    >
                       <LogOut size={12} />
                       <span className="hidden sm:inline">Keluar</span>
                     </button>
@@ -107,4 +138,3 @@ export default function Layout({ children }: { children: ReactElement<Data.Share
     </>
   )
 }
-

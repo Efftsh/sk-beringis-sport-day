@@ -54,13 +54,13 @@ export default function PublicLeaderboardTab({
 }: PublicLeaderboardTabProps) {
   const [selectedHouse, setSelectedHouse] = useState<HouseItem | null>(null)
 
-  // Sort houses by official tournament tiebreakers: Gold > Silver > Bronze > Points
+  // Sort houses purely by official tournament medal ranking: Gold > Silver > Bronze > Fourth
   const sortedHouses = [...houses].sort(
     (a, b) =>
       (b.medals?.gold || 0) - (a.medals?.gold || 0) ||
       (b.medals?.silver || 0) - (a.medals?.silver || 0) ||
       (b.medals?.bronze || 0) - (a.medals?.bronze || 0) ||
-      b.points - a.points
+      (b.medals?.fourth || 0) - (a.medals?.fourth || 0)
   )
 
   const firstPlace = sortedHouses[0]
@@ -165,8 +165,8 @@ export default function PublicLeaderboardTab({
                 <div style={{ fontSize: 'clamp(12px, 3vw, 14px)', fontWeight: 900, color: '#1e293b', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
                   {secondPlace.name}
                 </div>
-                <div style={{ fontSize: '11px', fontWeight: 800, color: secondPlace.color }}>
-                  {secondPlace.points} pts
+                <div style={{ fontSize: '11px', fontWeight: 800, color: secondPlace.color, marginTop: '2px' }}>
+                  🥇 {secondPlace.medals?.gold || 0} 🥈 {secondPlace.medals?.silver || 0} 🥉 {secondPlace.medals?.bronze || 0}
                 </div>
               </div>
               <div
@@ -221,8 +221,8 @@ export default function PublicLeaderboardTab({
                 <div style={{ fontSize: 'clamp(13px, 3.2vw, 16px)', fontWeight: 900, color: '#92400e', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
                   {firstPlace.name}
                 </div>
-                <div style={{ fontSize: '12px', fontWeight: 800, color: firstPlace.color }}>
-                  {firstPlace.points} pts
+                <div style={{ fontSize: '12px', fontWeight: 800, color: firstPlace.color, marginTop: '2px' }}>
+                  🥇 {firstPlace.medals?.gold || 0} 🥈 {firstPlace.medals?.silver || 0} 🥉 {firstPlace.medals?.bronze || 0}
                 </div>
               </div>
               <div
@@ -274,8 +274,8 @@ export default function PublicLeaderboardTab({
                 <div style={{ fontSize: 'clamp(12px, 3vw, 14px)', fontWeight: 900, color: '#9a3412', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
                   {thirdPlace.name}
                 </div>
-                <div style={{ fontSize: '11px', fontWeight: 800, color: thirdPlace.color }}>
-                  {thirdPlace.points} pts
+                <div style={{ fontSize: '11px', fontWeight: 800, color: thirdPlace.color, marginTop: '2px' }}>
+                  🥇 {thirdPlace.medals?.gold || 0} 🥈 {thirdPlace.medals?.silver || 0} 🥉 {thirdPlace.medals?.bronze || 0}
                 </div>
               </div>
               <div
@@ -410,7 +410,7 @@ export default function PublicLeaderboardTab({
                     borderRadius: '0 10px 10px 0',
                   }}
                 >
-                  JUMLAH MATA
+                  JUMLAH PINGAT
                 </th>
               </tr>
             </thead>
@@ -528,8 +528,8 @@ export default function PublicLeaderboardTab({
 
                     <td style={{ padding: '14px', textAlign: 'right' }}>
                       <span style={{ fontSize: '18px', fontWeight: 900, color: h.color }}>
-                        {h.points}{' '}
-                        <span style={{ fontSize: '11px', color: '#64748b', fontWeight: 600 }}>pts</span>
+                        {(h.medals?.gold || 0) + (h.medals?.silver || 0) + (h.medals?.bronze || 0)}{' '}
+                        <span style={{ fontSize: '11px', color: '#64748b', fontWeight: 600 }}>pingat</span>
                       </span>
                     </td>
                   </tr>
@@ -567,8 +567,8 @@ export default function PublicLeaderboardTab({
                 <span style={{ fontSize: '14px', fontWeight: 900, color: h.color }}>
                   Rumah {h.name}
                 </span>
-                <span style={{ fontSize: '15px', fontWeight: 900, color: '#0f172a' }}>
-                  {h.points} pts
+                <span style={{ fontSize: '14px', fontWeight: 900, color: '#0f172a' }}>
+                  {(h.medals?.gold || 0) + (h.medals?.silver || 0) + (h.medals?.bronze || 0)} Pingat
                 </span>
               </div>
               <div
@@ -646,7 +646,7 @@ export default function PublicLeaderboardTab({
                     Rumah {selectedHouse.name}
                   </h3>
                   <div style={{ fontSize: '11px', color: '#475569', fontWeight: 600 }}>
-                    {selectedHouse.motto} • {selectedHouse.points} Mata
+                    {selectedHouse.motto} • {(selectedHouse.medals?.gold || 0) + (selectedHouse.medals?.silver || 0) + (selectedHouse.medals?.bronze || 0)} Jumlah Pingat
                   </div>
                 </div>
               </div>
@@ -779,12 +779,6 @@ export default function PublicLeaderboardTab({
                             {item.eventCode} • {item.eventName} ({item.category})
                             {item.recordValue && ` • Catatan: ${item.recordValue}`}
                           </div>
-                        </div>
-
-                        <div style={{ textAlign: 'right', flexShrink: 0 }}>
-                          <span style={{ fontSize: '13px', fontWeight: 900, color: selectedHouse.color }}>
-                            +{item.points} pts
-                          </span>
                         </div>
                       </div>
                     )

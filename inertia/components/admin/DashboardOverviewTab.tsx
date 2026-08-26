@@ -39,9 +39,9 @@ export interface DashboardOverviewTabProps {
 const DashboardOverviewTab: FC<DashboardOverviewTabProps> = ({
   events,
   athletes,
-  computedHouses,
+  computedHouses: _computedHouses,
   sortedHouses,
-  totalPoints,
+  totalPoints: _totalPoints,
   completedCount,
   topOlahragawan,
   topOlahragawati,
@@ -57,7 +57,7 @@ const DashboardOverviewTab: FC<DashboardOverviewTabProps> = ({
           <div className="card-top-row">
             <div>
               <span className="card-label-small">Kedudukan Rumah Sukan</span>
-              <h3 className="card-title-main">Pungutan Mata Masa Nyata</h3>
+              <h3 className="card-title-main">Pungutan Pingat Semasa</h3>
             </div>
             <div className="chart-time-badge">
               <span>{events.length} Acara</span>
@@ -67,11 +67,11 @@ const DashboardOverviewTab: FC<DashboardOverviewTabProps> = ({
           {/* Bar Chart Representation */}
           <div className="standings-bar-chart-container">
             <div className="chart-y-axis">
-              <span>100</span>
-              <span>75</span>
-              <span>50</span>
-              <span>25</span>
-              <span>0</span>
+              <span>100%</span>
+              <span>75%</span>
+              <span>50%</span>
+              <span>25%</span>
+              <span>0%</span>
             </div>
 
             <div className="chart-bars-row">
@@ -79,8 +79,15 @@ const DashboardOverviewTab: FC<DashboardOverviewTabProps> = ({
               <div className="chart-trend-line-overlay" />
 
               {sortedHouses.map((h) => {
-                const maxPoints = Math.max(...computedHouses.map((x) => x.points), 10)
-                const pctHeight = Math.round((h.points / maxPoints) * 75) // cap at 75% for aesthetics
+                const totalMedals =
+                  (h.medals?.gold || 0) + (h.medals?.silver || 0) + (h.medals?.bronze || 0)
+                const maxMedals = Math.max(
+                  ...sortedHouses.map(
+                    (x) => (x.medals?.gold || 0) + (x.medals?.silver || 0) + (x.medals?.bronze || 0)
+                  ),
+                  5
+                )
+                const pctHeight = Math.round((totalMedals / maxMedals) * 75) // cap at 75% for aesthetics
 
                 return (
                   <div key={h.id} className="chart-bar-col">
@@ -93,7 +100,7 @@ const DashboardOverviewTab: FC<DashboardOverviewTabProps> = ({
                           boxShadow: `0 4px 10px ${h.color}35`,
                         }}
                       >
-                        <span className="bar-tooltip-val">{h.points} pt</span>
+                        <span className="bar-tooltip-val">{totalMedals} 🏅</span>
                       </div>
                     </div>
                     <span className="bar-label-text">{h.name}</span>
@@ -160,11 +167,8 @@ const DashboardOverviewTab: FC<DashboardOverviewTabProps> = ({
                   <th style={{ padding: '12px 10px', fontSize: '13px', fontWeight: 800, color: '#b45309' }}>
                     🥉 GANGSA
                   </th>
-                  <th style={{ padding: '12px 12px', fontSize: '12px', fontWeight: 800, color: '#0f172a' }}>
-                    JUMLAH PINGAT
-                  </th>
                   <th style={{ padding: '12px 14px', fontSize: '13px', fontWeight: 900, color: 'var(--forest-green)', textAlign: 'right', borderRadius: '0 8px 8px 0' }}>
-                    JUMLAH MATA
+                    JUMLAH PINGAT
                   </th>
                 </tr>
               </thead>
@@ -287,29 +291,16 @@ const DashboardOverviewTab: FC<DashboardOverviewTabProps> = ({
                       </td>
 
                       {/* Total Medals */}
-                      <td style={{ padding: '14px' }}>
-                        <span
-                          style={{
-                            fontWeight: 900,
-                            color: '#0f172a',
-                            fontSize: '15px',
-                          }}
-                        >
-                          {totalMedals}
-                        </span>
-                      </td>
-
-                      {/* Total Points */}
                       <td style={{ padding: '14px', textAlign: 'right' }}>
                         <span
                           style={{
-                            fontSize: '18px',
                             fontWeight: 900,
                             color: h.color,
+                            fontSize: '18px',
                           }}
                         >
-                          {h.points}{' '}
-                          <span style={{ fontSize: '11px', color: '#64748b', fontWeight: 600 }}>pts</span>
+                          {totalMedals}{' '}
+                          <span style={{ fontSize: '11px', color: '#64748b', fontWeight: 600 }}>pingat</span>
                         </span>
                       </td>
                     </tr>
@@ -365,7 +356,7 @@ const DashboardOverviewTab: FC<DashboardOverviewTabProps> = ({
                       Rumah {h.name}
                     </span>
                     <span style={{ fontSize: '14px', fontWeight: 900, color: '#0f172a' }}>
-                      {h.points} pts
+                      {(h.medals?.gold || 0) + (h.medals?.silver || 0) + (h.medals?.bronze || 0)} Pingat
                     </span>
                   </div>
                   <div style={{ display: 'flex', justifyContent: 'space-around', fontSize: '11px', fontWeight: 800, color: '#334155', background: '#ffffff', padding: '6px 8px', borderRadius: '8px' }}>
@@ -395,8 +386,17 @@ const DashboardOverviewTab: FC<DashboardOverviewTabProps> = ({
               </span>
             </div>
             <div className="metric-item-block">
-              <span className="metric-label">Jumlah Mata Diperuntuk</span>
-              <div className="metric-val">{totalPoints} pts</div>
+              <span className="metric-label">Jumlah Pingat Terkumpul</span>
+              <div className="metric-val">
+                {sortedHouses.reduce(
+                  (sum, h) =>
+                    sum +
+                    (h.medals?.gold || 0) +
+                    (h.medals?.silver || 0) +
+                    (h.medals?.bronze || 0),
+                  0
+                )}
+              </div>
               <span className="metric-trend-val text-green">Semua Rumah</span>
             </div>
             <div className="metric-item-block">

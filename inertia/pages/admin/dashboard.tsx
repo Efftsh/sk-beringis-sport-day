@@ -17,13 +17,17 @@ import EventResultsTab, {
   EventRecord,
   EventResultEntry,
   HouseItem,
-  isGroupEvent,
 } from '../../components/admin/EventResultsTab'
-import SpecialAwardsTab, { extractCohortYear } from '../../components/admin/SpecialAwardsTab'
+import SpecialAwardsTab from '../../components/admin/SpecialAwardsTab'
 import AthleteRegistrationTab, {
   AthleteRegistrationItem,
 } from '../../components/admin/AthleteRegistrationTab'
 import DashboardOverviewTab from '../../components/admin/DashboardOverviewTab'
+import ThemeToggle from '../../components/theme_toggle'
+import {
+  computeAthleteStandings,
+  getTopAwardContenders,
+} from '../../utils/athlete_standings'
 
 export type DashboardProps = Record<string, any> & {
   championshipInfo: {
@@ -53,7 +57,9 @@ const AdminDashboard: FC<DashboardProps> & { layout?: (page: any) => any } = ({
   registeredAthletes: initialAthletes = [],
 }) => {
   // Tabs matching the sidebar navigation: 'dashboard' | 'results' | 'awards' | 'registration'
-  const [activeTab, setActiveTab] = useState<'dashboard' | 'results' | 'awards' | 'registration'>('dashboard')
+  const [activeTab, setActiveTab] = useState<'dashboard' | 'results' | 'awards' | 'registration'>(
+    'dashboard'
+  )
 
   const [events, setEvents] = useState<EventRecord[]>(initialEvents || [])
   const [athletes, setAthletes] = useState<AthleteRegistrationItem[]>(initialAthletes || [])
@@ -121,114 +127,56 @@ const AdminDashboard: FC<DashboardProps> & { layout?: (page: any) => any } = ({
     )
 
     // Persistent backend mutation in Database
-    router.post(
-      `/admin/events/${eventId}/results`,
-      { results: updatedResults } as any,
-      {
-        preserveScroll: true,
-        onSuccess: () => {
-          const targetEvent = events.find((e) => e.id === eventId)
-          const eventLabel = targetEvent ? `${targetEvent.eventName} (${targetEvent.category})` : 'Acara'
-          setToastMessage(`✅ Keputusan "${eventLabel}" berjaya disimpan dalam pangkalan data & mata dikemas kini!`)
-          setTimeout(() => setToastMessage(null), 4000)
-        },
-      }
-    )
+    router.post(`/admin/events/${eventId}/results`, { results: updatedResults } as any, {
+      preserveScroll: true,
+      onSuccess: () => {
+        const targetEvent = events.find((e) => e.id === eventId)
+        const eventLabel = targetEvent
+          ? `${targetEvent.eventName} (${targetEvent.category})`
+          : 'Acara'
+        setToastMessage(
+          `✅ Keputusan "${eventLabel}" berjaya disimpan dalam pangkalan data & mata dikemas kini!`
+        )
+        setTimeout(() => setToastMessage(null), 4000)
+      },
+    })
   }
 
   const handleAddAthlete = (newAthlete: Omit<AthleteRegistrationItem, 'id'>) => {
-    router.post(
-      '/admin/athletes',
-      newAthlete,
-      {
-        preserveScroll: true,
-        onSuccess: () => {
-          setToastMessage(`🎉 Atlet "${newAthlete.name}" berjaya didaftarkan ke Rumah ${newAthlete.houseId.toUpperCase()}!`)
-          setTimeout(() => setToastMessage(null), 4000)
-        },
-      }
-    )
+    router.post('/admin/athletes', newAthlete, {
+      preserveScroll: true,
+      onSuccess: () => {
+        setToastMessage(
+          `🎉 Atlet "${newAthlete.name}" berjaya didaftarkan ke Rumah ${newAthlete.houseId.toUpperCase()}!`
+        )
+        setTimeout(() => setToastMessage(null), 4000)
+      },
+    })
   }
 
   const handleDeleteAthlete = (athleteId: string) => {
-    router.delete(
-      `/admin/athletes/${athleteId}`,
-      {
-        preserveScroll: true,
-        onSuccess: () => {
-          setToastMessage(`🗑️ Rekod atlet telah dipadamkan daripada pangkalan data.`)
-          setTimeout(() => setToastMessage(null), 3000)
-        },
-      }
-    )
+    router.delete(`/admin/athletes/${athleteId}`, {
+      preserveScroll: true,
+      onSuccess: () => {
+        setToastMessage(`🗑️ Rekod atlet telah dipadamkan daripada pangkalan data.`)
+        setTimeout(() => setToastMessage(null), 3000)
+      },
+    })
   }
 
-  // Best athlete contenders for Dashboard overview spotlight
-  const allAthletesForSpotlight = Array.from(
-    events
-      .filter((ev) => !isGroupEvent(ev.eventName) && ev.status === 'completed' && ev.stage !== 'Saringan')
-      .reduce((map, ev) => {
-        const detectedYear = extractCohortYear(ev.category, ev.eventName)
-
-        ev.results?.forEach((res) => {
-          if (!res.athleteName || res.athleteName.trim() === '') return
-          const name = res.athleteName.trim()
-          if (name.toLowerCase().startsWith('rumah ') || name.toLowerCase().startsWith('kuadren ')) return
-          if (!map.has(name)) {
-            const h = computedHouses.find((x) => x.id === res.houseId)
-            map.set(name, {
-              name,
-              houseName: h ? h.name : res.houseId,
-              houseColor: h ? h.color : '#2563eb',
-              gender: ev.category.toLowerCase().includes('perempuan') ? 'Perempuan' : 'Lelaki',
-              year: detectedYear,
-              gold: 0,
-              silver: 0,
-              bronze: 0,
-              points: 0,
-            })
-          }
-          const ath = map.get(name)!
-          if (ath.year === 'other' && detectedYear !== 'other') {
-            ath.year = detectedYear
-          }
-          if (res.place === 1) ath.gold += 1
-          else if (res.place === 2) ath.silver += 1
-          else if (res.place === 3) ath.bronze += 1
-          ath.points += res.points || 0
-        })
-        return map
-      }, new Map<string, any>())
-      .values()
+  // Best athlete contenders for Dashboard overview spotlight (including 4x50, 4x100, 4x200 relay events)
+  const allAthletesForSpotlight = computeAthleteStandings(
+    events as any,
+    computedHouses,
+    athletes
   )
 
-  const sortSpotlight = (a: any, b: any) =>
-    b.gold - a.gold ||
-    b.silver - a.silver ||
-    b.bronze - a.bronze ||
-    b.points - a.points
-
-  // 1. Anugerah Khas (Tahun 6)
-  const topOlahragawan =
-    allAthletesForSpotlight
-      .filter((a) => a.gender === 'Lelaki' && a.year === '6')
-      .sort(sortSpotlight)[0] || null
-
-  const topOlahragawati =
-    allAthletesForSpotlight
-      .filter((a) => a.gender === 'Perempuan' && a.year === '6')
-      .sort(sortSpotlight)[0] || null
-
-  // 2. Anugerah Harapan (Tahun 5)
-  const topHarapanLelaki =
-    allAthletesForSpotlight
-      .filter((a) => a.gender === 'Lelaki' && a.year === '5')
-      .sort(sortSpotlight)[0] || null
-
-  const topHarapanPerempuan =
-    allAthletesForSpotlight
-      .filter((a) => a.gender === 'Perempuan' && a.year === '5')
-      .sort(sortSpotlight)[0] || null
+  const {
+    topOlahragawanT6: topOlahragawan,
+    topOlahragawatiT6: topOlahragawati,
+    topHarapanBoyT5: topHarapanLelaki,
+    topHarapanGirlT5: topHarapanPerempuan,
+  } = getTopAwardContenders(allAthletesForSpotlight)
 
   return (
     <div className="redesigned-dashboard-frame">
@@ -323,12 +271,21 @@ const AdminDashboard: FC<DashboardProps> & { layout?: (page: any) => any } = ({
                   className="search-input-field"
                 />
               </div>
-              <span style={{ fontSize: '11px', color: '#64748b', marginLeft: '16px', marginTop: '6px', display: 'block' }}>
+              <span
+                style={{
+                  fontSize: '11px',
+                  color: '#64748b',
+                  marginLeft: '16px',
+                  marginTop: '6px',
+                  display: 'block',
+                }}
+              >
                 {championshipInfo.title} ({championshipInfo.edition}) • {championshipInfo.venue}
               </span>
             </div>
 
             <div className="top-profile-actions">
+              <ThemeToggle variant="pill" />
               <Link href="/" className="public-portal-badge" target="_blank">
                 <ExternalLink size={14} />
                 <span>Portal Awam</span>
@@ -360,7 +317,6 @@ const AdminDashboard: FC<DashboardProps> & { layout?: (page: any) => any } = ({
               </div>
             </div>
           </div>
-
 
           {/* Toast Message Alert */}
           {toastMessage && (
@@ -398,7 +354,11 @@ const AdminDashboard: FC<DashboardProps> & { layout?: (page: any) => any } = ({
             )}
 
             {activeTab === 'awards' && (
-              <SpecialAwardsTab events={events} houses={initialHouses} />
+              <SpecialAwardsTab
+                events={events}
+                houses={initialHouses}
+                registeredAthletes={athletes}
+              />
             )}
 
             {activeTab === 'registration' && (

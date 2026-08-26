@@ -1,36 +1,26 @@
-import { useState } from 'react'
+import { useState, useMemo } from 'react'
 import {
   Crown,
   Search,
   Star,
   Flame,
   Sparkles,
+  User,
+  Users,
+  X,
 } from 'lucide-react'
-import { EventRecord, HouseItem, isGroupEvent } from './EventResultsTab'
+import { EventRecord, HouseItem } from './EventResultsTab'
+import {
+  computeAthleteStandings,
+  getTopAwardContenders,
+  AthleteRegistrationItem,
+  AthleteStanding,
+} from '../../utils/athlete_standings'
 
 interface SpecialAwardsTabProps {
   events: EventRecord[]
   houses: HouseItem[]
-}
-
-export type CohortYear = '6' | '5' | '4' | '3' | '2' | '1' | 'pra' | 'other'
-
-interface AthleteStanding {
-  name: string
-  gender: 'Lelaki' | 'Perempuan'
-  year: CohortYear
-  houseId: string
-  houseName: string
-  houseColor: string
-  gold: number
-  silver: number
-  bronze: number
-  totalPoints: number
-  brokenRecordsCount: number
-  eventsJoined: Array<{
-    place: number
-    text: string
-  }>
+  registeredAthletes?: AthleteRegistrationItem[]
 }
 
 const RibbonMedalIcon = ({ place }: { place: number }) => {
@@ -51,117 +41,40 @@ const RibbonMedalIcon = ({ place }: { place: number }) => {
   )
 }
 
-export function extractCohortYear(category: string, eventName?: string): CohortYear {
-  const text = `${category || ''} ${eventName || ''}`.toLowerCase()
-  if (text.includes('tahun 6') || text.includes('thn 6') || text.match(/\bt6\b/)) return '6'
-  if (text.includes('tahun 5') || text.includes('thn 5') || text.match(/\bt5\b/)) return '5'
-  if (text.includes('tahun 4') || text.includes('thn 4') || text.match(/\bt4\b/)) return '4'
-  if (text.includes('tahun 3') || text.includes('thn 3') || text.match(/\bt3\b/)) return '3'
-  if (text.includes('tahun 2') || text.includes('thn 2') || text.match(/\bt2\b/)) return '2'
-  if (text.includes('tahun 1') || text.includes('thn 1') || text.match(/\bt1\b/)) return '1'
-  if (text.includes('6 tahun') || text.includes('prasekolah')) return 'pra'
-  return 'other'
-}
-
-export default function SpecialAwardsTab({ events, houses }: SpecialAwardsTabProps) {
+export default function SpecialAwardsTab({
+  events,
+  houses,
+  registeredAthletes = [],
+}: SpecialAwardsTabProps) {
   const [searchQuery, setSearchQuery] = useState('')
   const [activeFilterTab, setActiveFilterTab] = useState<'all' | 'khas' | 'harapan' | 'Lelaki' | 'Perempuan'>('all')
+  const [selectedAthlete, setSelectedAthlete] = useState<AthleteStanding | null>(null)
 
-  // Calculate individual athlete scores dynamically from all completed events (excluding relay/sukaneka)
-  const athleteMap = new Map<string, AthleteStanding>()
+  // Dynamic athlete calculations including 4x50, 4x100, 4x200 relay events
+  const allAthletes = useMemo(() => {
+    return computeAthleteStandings(events as any, houses, registeredAthletes)
+  }, [events, houses, registeredAthletes])
 
-  events.forEach((ev) => {
-    // Only count individual events for Olahragawan / Olahragawati / Harapan
-    const isGroup = isGroupEvent(ev.eventName)
-    if (isGroup || ev.status !== 'completed' || ev.stage === 'Saringan' || !ev.results) return
+  // Extract Top 4 Contenders
+  const { topOlahragawanT6, topOlahragawatiT6, topHarapanBoyT5, topHarapanGirlT5 } = useMemo(() => {
+    return getTopAwardContenders(allAthletes)
+  }, [allAthletes])
 
-    const isLelaki = ev.category.toLowerCase().includes('lelaki')
-    const isPerempuan = ev.category.toLowerCase().includes('perempuan')
-    const detectedYear = extractCohortYear(ev.category, ev.eventName)
-
-    ev.results.forEach((res) => {
-      if (!res.athleteName || res.athleteName.trim() === '') return
-      const name = res.athleteName.trim()
-      if (name.toLowerCase().startsWith('rumah ') || name.toLowerCase().startsWith('kuadren ')) return
-
-      const house = houses.find((h) => h.id === res.houseId)
-      const houseName = house ? house.name : res.houseId
-      const houseColor = house ? house.color : '#2563eb'
-
-      let gender: 'Lelaki' | 'Perempuan' = isLelaki ? 'Lelaki' : 'Perempuan'
-      if (!isLelaki && !isPerempuan) {
-        gender = 'Lelaki' // fallback for mixed
-      }
-
-      if (!athleteMap.has(name)) {
-        athleteMap.set(name, {
-          name,
-          gender,
-          year: detectedYear,
-          houseId: res.houseId,
-          houseName,
-          houseColor,
-          gold: 0,
-          silver: 0,
-          bronze: 0,
-          totalPoints: 0,
-          brokenRecordsCount: 0,
-          eventsJoined: [],
-        })
-      }
-
-      const ath = athleteMap.get(name)!
-      if (ath.year === 'other' && detectedYear !== 'other') {
-        ath.year = detectedYear
-      }
-
-      if (res.place === 1) ath.gold += 1
-      else if (res.place === 2) ath.silver += 1
-      else if (res.place === 3) ath.bronze += 1
-
-      ath.totalPoints += res.points || 0
-      if (res.isRecordBroken) ath.brokenRecordsCount += 1
-
-      ath.eventsJoined.push({
-        place: res.place,
-        text: `${ev.eventName} (${ev.category})`,
+  const filteredList = useMemo(() => {
+    return allAthletes
+      .filter((a) => {
+        if (activeFilterTab === 'khas') return a.year === '6'
+        if (activeFilterTab === 'harapan') return a.year === '5'
+        if (activeFilterTab === 'Lelaki') return a.gender === 'Lelaki'
+        if (activeFilterTab === 'Perempuan') return a.gender === 'Perempuan'
+        return true
       })
-    })
-  })
-
-  // Sort helper: Gold medals first, then Silver, then Bronze, then broken records, then points
-  const sortAthletes = (a: AthleteStanding, b: AthleteStanding) => {
-    if (b.gold !== a.gold) return b.gold - a.gold
-    if (b.silver !== a.silver) return b.silver - a.silver
-    if (b.bronze !== a.bronze) return b.bronze - a.bronze
-    if (b.brokenRecordsCount !== a.brokenRecordsCount) return b.brokenRecordsCount - a.brokenRecordsCount
-    return b.totalPoints - a.totalPoints
-  }
-
-  const allAthletes = Array.from(athleteMap.values())
-
-  // 1. Anugerah Khas (Tahun 6 Sahaja)
-  const topOlahragawanT6 = allAthletes.filter((a) => a.gender === 'Lelaki' && a.year === '6').sort(sortAthletes)[0] || null
-  const topOlahragawatiT6 = allAthletes.filter((a) => a.gender === 'Perempuan' && a.year === '6').sort(sortAthletes)[0] || null
-
-  // 2. Anugerah Harapan (Tahun 5 Sahaja)
-  const topHarapanBoyT5 = allAthletes.filter((a) => a.gender === 'Lelaki' && a.year === '5').sort(sortAthletes)[0] || null
-  const topHarapanGirlT5 = allAthletes.filter((a) => a.gender === 'Perempuan' && a.year === '5').sort(sortAthletes)[0] || null
-
-  const filteredList = allAthletes
-    .filter((a) => {
-      if (activeFilterTab === 'khas') return a.year === '6'
-      if (activeFilterTab === 'harapan') return a.year === '5'
-      if (activeFilterTab === 'Lelaki') return a.gender === 'Lelaki'
-      if (activeFilterTab === 'Perempuan') return a.gender === 'Perempuan'
-      return true
-    })
-    .sort(sortAthletes)
-    .filter(
-      (a) =>
-        a.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-        a.houseName.toLowerCase().includes(searchQuery.toLowerCase())
-    )
+      .filter(
+        (a) =>
+          a.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+          a.houseName.toLowerCase().includes(searchQuery.toLowerCase())
+      )
+  }, [allAthletes, activeFilterTab, searchQuery])
 
   const getHouseTextColor = (houseName: string) => {
     const lower = houseName.toLowerCase()
@@ -198,7 +111,7 @@ export default function SpecialAwardsTab({ events, houses }: SpecialAwardsTabPro
           Athlete Special Awards Dashboard
         </h1>
         <p style={{ fontSize: '15px', color: '#4b5563', margin: 0, fontWeight: 500 }}>
-          Anugerah Khas Kejohanan (Tahun 6) & Anugerah Harapan (Tahun 5)
+          Anugerah Khas Kejohanan (Tahun 6) & Anugerah Harapan (Tahun 5) • Termasuk Acara Berganti-ganti (4x50, 4x100, 4x200)
         </p>
       </div>
 
@@ -322,6 +235,7 @@ export default function SpecialAwardsTab({ events, houses }: SpecialAwardsTabPro
                           >
                             <span>🏠</span>
                             <span>Rumah {topOlahragawanT6.houseName}</span>
+                            {topOlahragawanT6.className && <span>• {topOlahragawanT6.className}</span>}
                           </span>
                         )
                       })()}
@@ -346,19 +260,25 @@ export default function SpecialAwardsTab({ events, houses }: SpecialAwardsTabPro
                       <div style={{ fontSize: '18px', fontWeight: 900, color: '#0f172a' }}>
                         <span style={{ fontSize: '15px', marginRight: '3px' }}>🥇</span> {topOlahragawanT6.gold}
                       </div>
-                      <div style={{ fontSize: '11px', color: '#64748b', fontWeight: 700, marginTop: '2px' }}>Emas</div>
+                      <div style={{ fontSize: '11px', color: '#64748b', fontWeight: 700, marginTop: '2px' }}>
+                        Emas ({topOlahragawanT6.individualGold}👤 {topOlahragawanT6.groupGold}👥)
+                      </div>
                     </div>
                     <div style={{ borderRight: '1px solid #f1f5f9' }}>
                       <div style={{ fontSize: '18px', fontWeight: 900, color: '#0f172a' }}>
                         <span style={{ fontSize: '15px', marginRight: '3px' }}>🥈</span> {topOlahragawanT6.silver}
                       </div>
-                      <div style={{ fontSize: '11px', color: '#64748b', fontWeight: 700, marginTop: '2px' }}>Perak</div>
+                      <div style={{ fontSize: '11px', color: '#64748b', fontWeight: 700, marginTop: '2px' }}>
+                        Perak ({topOlahragawanT6.individualSilver}👤 {topOlahragawanT6.groupSilver}👥)
+                      </div>
                     </div>
                     <div style={{ borderRight: '1px solid #f1f5f9' }}>
                       <div style={{ fontSize: '18px', fontWeight: 900, color: '#0f172a' }}>
                         <span style={{ fontSize: '15px', marginRight: '3px' }}>🥉</span> {topOlahragawanT6.bronze}
                       </div>
-                      <div style={{ fontSize: '11px', color: '#64748b', fontWeight: 700, marginTop: '2px' }}>Gangsa</div>
+                      <div style={{ fontSize: '11px', color: '#64748b', fontWeight: 700, marginTop: '2px' }}>
+                        Gangsa ({topOlahragawanT6.individualBronze}👤 {topOlahragawanT6.groupBronze}👥)
+                      </div>
                     </div>
                     <div>
                       <div style={{ fontSize: '18px', fontWeight: 900, color: '#0f172a', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '3px' }}>
@@ -369,7 +289,7 @@ export default function SpecialAwardsTab({ events, houses }: SpecialAwardsTabPro
                     </div>
                   </div>
 
-                  {/* Pencapaian Acara */}
+                  {/* Pencapaian Acara with Individu / Kumpulan tags */}
                   <div style={{ display: 'flex', alignItems: 'center', gap: '8px', flexWrap: 'wrap' }}>
                     <span style={{ fontSize: '13px', fontWeight: 800, color: '#1e293b' }}>Pencapaian Acara:</span>
                     {topOlahragawanT6.eventsJoined.map((ev, i) => (
@@ -377,7 +297,7 @@ export default function SpecialAwardsTab({ events, houses }: SpecialAwardsTabPro
                         key={i}
                         style={{
                           background: '#ffffff',
-                          border: '1px solid #bfdbfe',
+                          border: `1px solid ${ev.isGroup ? '#818cf8' : '#bfdbfe'}`,
                           borderRadius: '9999px',
                           padding: '4px 12px',
                           fontSize: '12px',
@@ -390,7 +310,19 @@ export default function SpecialAwardsTab({ events, houses }: SpecialAwardsTabPro
                         }}
                       >
                         <RibbonMedalIcon place={ev.place} />
-                        <span>{ev.text}</span>
+                        <span>{ev.eventName} ({ev.category})</span>
+                        <span
+                          style={{
+                            fontSize: '9px',
+                            fontWeight: 800,
+                            padding: '1px 5px',
+                            borderRadius: '4px',
+                            background: ev.isGroup ? '#e0e7ff' : '#eff6ff',
+                            color: ev.isGroup ? '#4338ca' : '#1d4ed8',
+                          }}
+                        >
+                          {ev.isGroup ? '👥 Kumpulan' : '👤 Individu'}
+                        </span>
                       </span>
                     ))}
                   </div>
@@ -408,7 +340,7 @@ export default function SpecialAwardsTab({ events, houses }: SpecialAwardsTabPro
                     textAlign: 'center',
                   }}
                 >
-                  Belum ada keputusan acara individu Tahun 6 Lelaki direkodkan.
+                  Belum ada keputusan acara Tahun 6 Lelaki direkodkan.
                 </div>
               )}
             </div>
@@ -500,6 +432,7 @@ export default function SpecialAwardsTab({ events, houses }: SpecialAwardsTabPro
                           >
                             <span>🏠</span>
                             <span>Rumah {topOlahragawatiT6.houseName}</span>
+                            {topOlahragawatiT6.className && <span>• {topOlahragawatiT6.className}</span>}
                           </span>
                         )
                       })()}
@@ -515,7 +448,7 @@ export default function SpecialAwardsTab({ events, houses }: SpecialAwardsTabPro
                       display: 'grid',
                       gridTemplateColumns: 'repeat(4, 1fr)',
                       textAlign: 'center',
-                      border: '1px solid #fce7f3',
+                      border: '1px solid #fecdd3',
                       boxShadow: '0 2px 8px rgba(0,0,0,0.03)',
                       marginBottom: '16px',
                     }}
@@ -524,19 +457,25 @@ export default function SpecialAwardsTab({ events, houses }: SpecialAwardsTabPro
                       <div style={{ fontSize: '18px', fontWeight: 900, color: '#0f172a' }}>
                         <span style={{ fontSize: '15px', marginRight: '3px' }}>🥇</span> {topOlahragawatiT6.gold}
                       </div>
-                      <div style={{ fontSize: '11px', color: '#64748b', fontWeight: 700, marginTop: '2px' }}>Emas</div>
+                      <div style={{ fontSize: '11px', color: '#64748b', fontWeight: 700, marginTop: '2px' }}>
+                        Emas ({topOlahragawatiT6.individualGold}👤 {topOlahragawatiT6.groupGold}👥)
+                      </div>
                     </div>
                     <div style={{ borderRight: '1px solid #f1f5f9' }}>
                       <div style={{ fontSize: '18px', fontWeight: 900, color: '#0f172a' }}>
                         <span style={{ fontSize: '15px', marginRight: '3px' }}>🥈</span> {topOlahragawatiT6.silver}
                       </div>
-                      <div style={{ fontSize: '11px', color: '#64748b', fontWeight: 700, marginTop: '2px' }}>Perak</div>
+                      <div style={{ fontSize: '11px', color: '#64748b', fontWeight: 700, marginTop: '2px' }}>
+                        Perak ({topOlahragawatiT6.individualSilver}👤 {topOlahragawatiT6.groupSilver}👥)
+                      </div>
                     </div>
                     <div style={{ borderRight: '1px solid #f1f5f9' }}>
                       <div style={{ fontSize: '18px', fontWeight: 900, color: '#0f172a' }}>
                         <span style={{ fontSize: '15px', marginRight: '3px' }}>🥉</span> {topOlahragawatiT6.bronze}
                       </div>
-                      <div style={{ fontSize: '11px', color: '#64748b', fontWeight: 700, marginTop: '2px' }}>Gangsa</div>
+                      <div style={{ fontSize: '11px', color: '#64748b', fontWeight: 700, marginTop: '2px' }}>
+                        Gangsa ({topOlahragawatiT6.individualBronze}👤 {topOlahragawatiT6.groupBronze}👥)
+                      </div>
                     </div>
                     <div>
                       <div style={{ fontSize: '18px', fontWeight: 900, color: '#0f172a', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '3px' }}>
@@ -547,7 +486,7 @@ export default function SpecialAwardsTab({ events, houses }: SpecialAwardsTabPro
                     </div>
                   </div>
 
-                  {/* Pencapaian Acara */}
+                  {/* Pencapaian Acara with Individu / Kumpulan tags */}
                   <div style={{ display: 'flex', alignItems: 'center', gap: '8px', flexWrap: 'wrap' }}>
                     <span style={{ fontSize: '13px', fontWeight: 800, color: '#1e293b' }}>Pencapaian Acara:</span>
                     {topOlahragawatiT6.eventsJoined.map((ev, i) => (
@@ -555,7 +494,7 @@ export default function SpecialAwardsTab({ events, houses }: SpecialAwardsTabPro
                         key={i}
                         style={{
                           background: '#ffffff',
-                          border: '1px solid #fbcfe8',
+                          border: `1px solid ${ev.isGroup ? '#f472b6' : '#fecdd3'}`,
                           borderRadius: '9999px',
                           padding: '4px 12px',
                           fontSize: '12px',
@@ -568,7 +507,19 @@ export default function SpecialAwardsTab({ events, houses }: SpecialAwardsTabPro
                         }}
                       >
                         <RibbonMedalIcon place={ev.place} />
-                        <span>{ev.text}</span>
+                        <span>{ev.eventName} ({ev.category})</span>
+                        <span
+                          style={{
+                            fontSize: '9px',
+                            fontWeight: 800,
+                            padding: '1px 5px',
+                            borderRadius: '4px',
+                            background: ev.isGroup ? '#fdf2f8' : '#fff1f2',
+                            color: ev.isGroup ? '#be185d' : '#e11d48',
+                          }}
+                        >
+                          {ev.isGroup ? '👥 Kumpulan' : '👤 Individu'}
+                        </span>
                       </span>
                     ))}
                   </div>
@@ -579,15 +530,14 @@ export default function SpecialAwardsTab({ events, houses }: SpecialAwardsTabPro
                     display: 'flex',
                     alignItems: 'center',
                     justifyContent: 'center',
-                    minHeight: '140px',
+                    height: '140px',
                     color: '#475569',
                     fontSize: '14px',
                     fontWeight: 600,
                     textAlign: 'center',
-                    padding: '20px',
                   }}
                 >
-                  Belum ada keputusan acara individu Tahun 6 Perempuan direkodkan.
+                  Belum ada keputusan acara Tahun 6 Perempuan direkodkan.
                 </div>
               )}
             </div>
@@ -715,6 +665,7 @@ export default function SpecialAwardsTab({ events, houses }: SpecialAwardsTabPro
                           >
                             <span>🏠</span>
                             <span>Rumah {topHarapanBoyT5.houseName}</span>
+                            {topHarapanBoyT5.className && <span>• {topHarapanBoyT5.className}</span>}
                           </span>
                         )
                       })()}
@@ -739,19 +690,25 @@ export default function SpecialAwardsTab({ events, houses }: SpecialAwardsTabPro
                       <div style={{ fontSize: '18px', fontWeight: 900, color: '#0f172a' }}>
                         <span style={{ fontSize: '15px', marginRight: '3px' }}>🥇</span> {topHarapanBoyT5.gold}
                       </div>
-                      <div style={{ fontSize: '11px', color: '#64748b', fontWeight: 700, marginTop: '2px' }}>Emas</div>
+                      <div style={{ fontSize: '11px', color: '#64748b', fontWeight: 700, marginTop: '2px' }}>
+                        Emas ({topHarapanBoyT5.individualGold}👤 {topHarapanBoyT5.groupGold}👥)
+                      </div>
                     </div>
                     <div style={{ borderRight: '1px solid #f1f5f9' }}>
                       <div style={{ fontSize: '18px', fontWeight: 900, color: '#0f172a' }}>
                         <span style={{ fontSize: '15px', marginRight: '3px' }}>🥈</span> {topHarapanBoyT5.silver}
                       </div>
-                      <div style={{ fontSize: '11px', color: '#64748b', fontWeight: 700, marginTop: '2px' }}>Perak</div>
+                      <div style={{ fontSize: '11px', color: '#64748b', fontWeight: 700, marginTop: '2px' }}>
+                        Perak ({topHarapanBoyT5.individualSilver}👤 {topHarapanBoyT5.groupSilver}👥)
+                      </div>
                     </div>
                     <div style={{ borderRight: '1px solid #f1f5f9' }}>
                       <div style={{ fontSize: '18px', fontWeight: 900, color: '#0f172a' }}>
                         <span style={{ fontSize: '15px', marginRight: '3px' }}>🥉</span> {topHarapanBoyT5.bronze}
                       </div>
-                      <div style={{ fontSize: '11px', color: '#64748b', fontWeight: 700, marginTop: '2px' }}>Gangsa</div>
+                      <div style={{ fontSize: '11px', color: '#64748b', fontWeight: 700, marginTop: '2px' }}>
+                        Gangsa ({topHarapanBoyT5.individualBronze}👤 {topHarapanBoyT5.groupBronze}👥)
+                      </div>
                     </div>
                     <div>
                       <div style={{ fontSize: '18px', fontWeight: 900, color: '#0f172a', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '3px' }}>
@@ -770,7 +727,7 @@ export default function SpecialAwardsTab({ events, houses }: SpecialAwardsTabPro
                         key={i}
                         style={{
                           background: '#ffffff',
-                          border: '1px solid #a7f3d0',
+                          border: `1px solid ${ev.isGroup ? '#34d399' : '#a7f3d0'}`,
                           borderRadius: '9999px',
                           padding: '4px 12px',
                           fontSize: '12px',
@@ -783,7 +740,19 @@ export default function SpecialAwardsTab({ events, houses }: SpecialAwardsTabPro
                         }}
                       >
                         <RibbonMedalIcon place={ev.place} />
-                        <span>{ev.text}</span>
+                        <span>{ev.eventName} ({ev.category})</span>
+                        <span
+                          style={{
+                            fontSize: '9px',
+                            fontWeight: 800,
+                            padding: '1px 5px',
+                            borderRadius: '4px',
+                            background: ev.isGroup ? '#d1fae5' : '#ecfdf5',
+                            color: ev.isGroup ? '#047857' : '#065f46',
+                          }}
+                        >
+                          {ev.isGroup ? '👥 Kumpulan' : '👤 Individu'}
+                        </span>
                       </span>
                     ))}
                   </div>
@@ -801,7 +770,7 @@ export default function SpecialAwardsTab({ events, houses }: SpecialAwardsTabPro
                     textAlign: 'center',
                   }}
                 >
-                  Belum ada keputusan acara individu Tahun 5 Lelaki direkodkan.
+                  Belum ada keputusan acara Tahun 5 Lelaki direkodkan.
                 </div>
               )}
             </div>
@@ -893,6 +862,7 @@ export default function SpecialAwardsTab({ events, houses }: SpecialAwardsTabPro
                           >
                             <span>🏠</span>
                             <span>Rumah {topHarapanGirlT5.houseName}</span>
+                            {topHarapanGirlT5.className && <span>• {topHarapanGirlT5.className}</span>}
                           </span>
                         )
                       })()}
@@ -917,19 +887,25 @@ export default function SpecialAwardsTab({ events, houses }: SpecialAwardsTabPro
                       <div style={{ fontSize: '18px', fontWeight: 900, color: '#0f172a' }}>
                         <span style={{ fontSize: '15px', marginRight: '3px' }}>🥇</span> {topHarapanGirlT5.gold}
                       </div>
-                      <div style={{ fontSize: '11px', color: '#64748b', fontWeight: 700, marginTop: '2px' }}>Emas</div>
+                      <div style={{ fontSize: '11px', color: '#64748b', fontWeight: 700, marginTop: '2px' }}>
+                        Emas ({topHarapanGirlT5.individualGold}👤 {topHarapanGirlT5.groupGold}👥)
+                      </div>
                     </div>
                     <div style={{ borderRight: '1px solid #f1f5f9' }}>
                       <div style={{ fontSize: '18px', fontWeight: 900, color: '#0f172a' }}>
                         <span style={{ fontSize: '15px', marginRight: '3px' }}>🥈</span> {topHarapanGirlT5.silver}
                       </div>
-                      <div style={{ fontSize: '11px', color: '#64748b', fontWeight: 700, marginTop: '2px' }}>Perak</div>
+                      <div style={{ fontSize: '11px', color: '#64748b', fontWeight: 700, marginTop: '2px' }}>
+                        Perak ({topHarapanGirlT5.individualSilver}👤 {topHarapanGirlT5.groupSilver}👥)
+                      </div>
                     </div>
                     <div style={{ borderRight: '1px solid #f1f5f9' }}>
                       <div style={{ fontSize: '18px', fontWeight: 900, color: '#0f172a' }}>
                         <span style={{ fontSize: '15px', marginRight: '3px' }}>🥉</span> {topHarapanGirlT5.bronze}
                       </div>
-                      <div style={{ fontSize: '11px', color: '#64748b', fontWeight: 700, marginTop: '2px' }}>Gangsa</div>
+                      <div style={{ fontSize: '11px', color: '#64748b', fontWeight: 700, marginTop: '2px' }}>
+                        Gangsa ({topHarapanGirlT5.individualBronze}👤 {topHarapanGirlT5.groupBronze}👥)
+                      </div>
                     </div>
                     <div>
                       <div style={{ fontSize: '18px', fontWeight: 900, color: '#0f172a', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '3px' }}>
@@ -948,7 +924,7 @@ export default function SpecialAwardsTab({ events, houses }: SpecialAwardsTabPro
                         key={i}
                         style={{
                           background: '#ffffff',
-                          border: '1px solid #fed7aa',
+                          border: `1px solid ${ev.isGroup ? '#fb923c' : '#fed7aa'}`,
                           borderRadius: '9999px',
                           padding: '4px 12px',
                           fontSize: '12px',
@@ -961,7 +937,19 @@ export default function SpecialAwardsTab({ events, houses }: SpecialAwardsTabPro
                         }}
                       >
                         <RibbonMedalIcon place={ev.place} />
-                        <span>{ev.text}</span>
+                        <span>{ev.eventName} ({ev.category})</span>
+                        <span
+                          style={{
+                            fontSize: '9px',
+                            fontWeight: 800,
+                            padding: '1px 5px',
+                            borderRadius: '4px',
+                            background: ev.isGroup ? '#ffedd5' : '#fff7ed',
+                            color: ev.isGroup ? '#c2410c' : '#9a3412',
+                          }}
+                        >
+                          {ev.isGroup ? '👥 Kumpulan' : '👤 Individu'}
+                        </span>
                       </span>
                     ))}
                   </div>
@@ -980,7 +968,7 @@ export default function SpecialAwardsTab({ events, houses }: SpecialAwardsTabPro
                     padding: '20px',
                   }}
                 >
-                  Belum ada keputusan acara individu Tahun 5 Perempuan direkodkan.
+                  Belum ada keputusan acara Tahun 5 Perempuan direkodkan.
                 </div>
               )}
             </div>
@@ -1006,38 +994,73 @@ export default function SpecialAwardsTab({ events, houses }: SpecialAwardsTabPro
               Overall Standings
             </h3>
             <p style={{ fontSize: '13px', color: '#64748b', margin: 0, fontWeight: 500 }}>
-              Senarai Pungutan Pingat Atlet Individu
+              Senarai Pungutan Pingat Atlet Individu & Kumpulan
             </p>
           </div>
 
-          <div style={{ position: 'relative', width: '280px' }}>
-            <Search
-              size={16}
+          <div style={{ display: 'flex', alignItems: 'center', gap: '8px', flexWrap: 'wrap' }}>
+            <span
               style={{
-                position: 'absolute',
-                left: '14px',
-                top: '50%',
-                transform: 'translateY(-50%)',
-                color: '#94a3b8',
+                fontSize: '11px',
+                fontWeight: 800,
+                background: '#eff6ff',
+                color: '#1d4ed8',
+                border: '1px solid #bfdbfe',
+                padding: '3px 8px',
+                borderRadius: '6px',
+                display: 'inline-flex',
+                alignItems: 'center',
+                gap: '4px',
               }}
-            />
-            <input
-              type="text"
-              placeholder="Cari atlet..."
-              value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
+            >
+              <User size={12} /> Individu (Podium 7/5/3)
+            </span>
+            <span
               style={{
-                width: '100%',
-                padding: '9px 14px 9px 38px',
-                background: '#ffffff',
-                border: '1px solid #cbd5e1',
-                borderRadius: '12px',
-                fontSize: '13px',
-                color: '#0f172a',
-                outline: 'none',
-                boxSizing: 'border-box',
+                fontSize: '11px',
+                fontWeight: 800,
+                background: '#eef2ff',
+                color: '#4338ca',
+                border: '1px solid #c7d2fe',
+                padding: '3px 8px',
+                borderRadius: '6px',
+                display: 'inline-flex',
+                alignItems: 'center',
+                gap: '4px',
               }}
-            />
+            >
+              <Users size={12} /> Kumpulan (4x50, 4x100, 4x200)
+            </span>
+
+            <div style={{ position: 'relative', width: '240px' }}>
+              <Search
+                size={16}
+                style={{
+                  position: 'absolute',
+                  left: '14px',
+                  top: '50%',
+                  transform: 'translateY(-50%)',
+                  color: '#94a3b8',
+                }}
+              />
+              <input
+                type="text"
+                placeholder="Cari atlet..."
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                style={{
+                  width: '100%',
+                  padding: '9px 14px 9px 38px',
+                  background: '#ffffff',
+                  border: '1px solid #cbd5e1',
+                  borderRadius: '12px',
+                  fontSize: '13px',
+                  color: '#0f172a',
+                  outline: 'none',
+                  boxSizing: 'border-box',
+                }}
+              />
+            </div>
           </div>
         </div>
 
@@ -1090,7 +1113,7 @@ export default function SpecialAwardsTab({ events, houses }: SpecialAwardsTabPro
             <div
               style={{
                 display: 'grid',
-                gridTemplateColumns: '45px 2.2fr 95px 60px 60px 60px 70px 100px 2fr',
+                gridTemplateColumns: '45px 2.2fr 95px 65px 65px 65px 70px 100px 2fr',
                 padding: '0 16px 12px 16px',
                 fontSize: '13px',
                 fontWeight: 800,
@@ -1105,7 +1128,7 @@ export default function SpecialAwardsTab({ events, houses }: SpecialAwardsTabPro
               <div style={{ textAlign: 'center' }}>Perak</div>
               <div style={{ textAlign: 'center' }}>Gangsa</div>
               <div style={{ textAlign: 'center' }}>Rekod</div>
-              <div style={{ textAlign: 'center' }}>Jumlah Mata</div>
+              <div style={{ textAlign: 'center' }}>Jumlah Pingat</div>
               <div>Acara Ditandingi</div>
             </div>
 
@@ -1135,9 +1158,10 @@ export default function SpecialAwardsTab({ events, houses }: SpecialAwardsTabPro
                   return (
                     <div
                       key={idx}
+                      onClick={() => setSelectedAthlete(ath)}
                       style={{
                         display: 'grid',
-                        gridTemplateColumns: '45px 2.2fr 95px 60px 60px 60px 70px 100px 2fr',
+                        gridTemplateColumns: '45px 2.2fr 95px 65px 65px 65px 70px 100px 2fr',
                         padding: '12px 16px',
                         background: '#ffffff',
                         borderRadius: '12px',
@@ -1145,6 +1169,7 @@ export default function SpecialAwardsTab({ events, houses }: SpecialAwardsTabPro
                         alignItems: 'center',
                         boxShadow: '0 1px 3px rgba(0, 0, 0, 0.03)',
                         fontSize: '13px',
+                        cursor: 'pointer',
                       }}
                     >
                       {/* Rank */}
@@ -1158,7 +1183,7 @@ export default function SpecialAwardsTab({ events, houses }: SpecialAwardsTabPro
                           {ath.name}
                         </div>
                         <div style={{ fontSize: '12px', fontWeight: 600, color: houseColor, marginTop: '2px' }}>
-                          Rumah {ath.houseName} • {ath.gender}
+                          Rumah {ath.houseName} {ath.className ? `• ${ath.className}` : ''} • {ath.gender}
                         </div>
                       </div>
 
@@ -1182,22 +1207,37 @@ export default function SpecialAwardsTab({ events, houses }: SpecialAwardsTabPro
                       </div>
 
                       {/* Emas */}
-                      <div style={{ textAlign: 'center', fontWeight: 500, color: '#0f172a', fontSize: '13px' }}>
-                        {ath.gold}
+                      <div style={{ textAlign: 'center', fontWeight: 700, color: '#b45309', fontSize: '13px' }}>
+                        <div>{ath.gold}</div>
+                        {(ath.individualGold > 0 || ath.groupGold > 0) && (
+                          <div style={{ fontSize: '9px', color: '#94a3b8' }}>
+                            {ath.individualGold}👤 {ath.groupGold}👥
+                          </div>
+                        )}
                       </div>
 
                       {/* Perak */}
-                      <div style={{ textAlign: 'center', fontWeight: 500, color: '#0f172a', fontSize: '13px' }}>
-                        {ath.silver}
+                      <div style={{ textAlign: 'center', fontWeight: 700, color: '#475569', fontSize: '13px' }}>
+                        <div>{ath.silver}</div>
+                        {(ath.individualSilver > 0 || ath.groupSilver > 0) && (
+                          <div style={{ fontSize: '9px', color: '#94a3b8' }}>
+                            {ath.individualSilver}👤 {ath.groupSilver}👥
+                          </div>
+                        )}
                       </div>
 
                       {/* Gangsa */}
-                      <div style={{ textAlign: 'center', fontWeight: 500, color: '#0f172a', fontSize: '13px' }}>
-                        {ath.bronze}
+                      <div style={{ textAlign: 'center', fontWeight: 700, color: '#b45309', fontSize: '13px' }}>
+                        <div>{ath.bronze}</div>
+                        {(ath.individualBronze > 0 || ath.groupBronze > 0) && (
+                          <div style={{ fontSize: '9px', color: '#94a3b8' }}>
+                            {ath.individualBronze}👤 {ath.groupBronze}👥
+                          </div>
+                        )}
                       </div>
 
-                      {/* Rekod */}
-                      <div style={{ textAlign: 'center', fontWeight: 500, color: ath.brokenRecordsCount > 0 ? '#dc2626' : '#0f172a' }}>
+                      {/* Rekod Baharu */}
+                      <div style={{ textAlign: 'center', fontWeight: 700, color: '#dc2626', fontSize: '13px' }}>
                         {ath.brokenRecordsCount > 0 ? (
                           <span style={{ display: 'inline-flex', alignItems: 'center', gap: '3px', fontWeight: 700 }}>
                             <Flame size={14} /> {ath.brokenRecordsCount}
@@ -1207,12 +1247,12 @@ export default function SpecialAwardsTab({ events, houses }: SpecialAwardsTabPro
                         )}
                       </div>
 
-                      {/* Jumlah Mata */}
-                      <div style={{ textAlign: 'center', fontWeight: 500, color: '#0f172a', fontSize: '13px' }}>
-                        {ath.totalPoints} pts
+                      {/* Jumlah Pingat */}
+                      <div style={{ textAlign: 'center', fontWeight: 800, color: '#0f172a', fontSize: '13px' }}>
+                        {ath.gold + ath.silver + ath.bronze} Pingat
                       </div>
 
-                      {/* Acara Ditandingi */}
+                      {/* Acara Ditandingi with Individu / Kumpulan Indicators */}
                       <div style={{ display: 'flex', gap: '6px', flexWrap: 'wrap', alignItems: 'center' }}>
                         {ath.eventsJoined.map((ev, i) => (
                           <div
@@ -1220,14 +1260,42 @@ export default function SpecialAwardsTab({ events, houses }: SpecialAwardsTabPro
                             style={{
                               display: 'inline-flex',
                               alignItems: 'center',
-                              gap: '6px',
-                              fontSize: '12px',
-                              fontWeight: 500,
-                              color: '#0f172a',
+                              gap: '4px',
+                              padding: '2px 8px',
+                              borderRadius: '6px',
+                              background:
+                                ev.place === 1 ? '#fef3c7' : ev.place === 2 ? '#f1f5f9' : '#ffedd5',
+                              border: `1px solid ${
+                                ev.isGroup
+                                  ? '#c7d2fe'
+                                  : ev.place === 1
+                                    ? '#fde68a'
+                                    : ev.place === 2
+                                      ? '#cbd5e1'
+                                      : '#fed7aa'
+                              }`,
+                              fontSize: '11px',
+                              fontWeight: 700,
+                              color:
+                                ev.place === 1 ? '#92400e' : ev.place === 2 ? '#334155' : '#9a3412',
                             }}
                           >
-                            <RibbonMedalIcon place={ev.place} />
-                            <span>{ev.text}</span>
+                            <span>{ev.place === 1 ? '🥇' : ev.place === 2 ? '🥈' : '🥉'}</span>
+                            <span>{ev.eventName}</span>
+                            <span
+                              style={{
+                                fontSize: '9px',
+                                padding: '0 4px',
+                                borderRadius: '3px',
+                                background: ev.isGroup ? '#e0e7ff' : '#f8fafc',
+                                color: ev.isGroup ? '#4338ca' : '#64748b',
+                                fontWeight: 800,
+                              }}
+                            >
+                              {ev.isGroup ? '👥 Kump' : '👤 Ind'}
+                            </span>
+                            {ev.recordValue && <span style={{ color: '#0284c7' }}>• {ev.recordValue}</span>}
+                            {ev.isRecordBroken && <span style={{ color: '#dc2626' }}>🔥 Rekod</span>}
                           </div>
                         ))}
                       </div>
@@ -1239,6 +1307,193 @@ export default function SpecialAwardsTab({ events, houses }: SpecialAwardsTabPro
           </div>
         </div>
       </div>
+
+      {/* Selected Athlete Detail Modal */}
+      {selectedAthlete && (
+        <div
+          style={{
+            position: 'fixed',
+            inset: 0,
+            backgroundColor: 'rgba(15, 23, 42, 0.65)',
+            backdropFilter: 'blur(4px)',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            zIndex: 9999,
+            padding: '16px',
+          }}
+          onClick={() => setSelectedAthlete(null)}
+        >
+          <div
+            style={{
+              background: '#ffffff',
+              borderRadius: '20px',
+              maxWidth: '520px',
+              width: '100%',
+              padding: '24px',
+              boxShadow: '0 20px 40px rgba(0, 0, 0, 0.15)',
+              position: 'relative',
+              maxHeight: '90vh',
+              overflowY: 'auto',
+            }}
+            onClick={(e) => e.stopPropagation()}
+          >
+            <button
+              onClick={() => setSelectedAthlete(null)}
+              style={{
+                position: 'absolute',
+                top: '16px',
+                right: '16px',
+                background: '#f1f5f9',
+                border: 'none',
+                borderRadius: '50%',
+                width: '32px',
+                height: '32px',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                cursor: 'pointer',
+                color: '#64748b',
+              }}
+            >
+              <X size={16} />
+            </button>
+
+            {/* Modal Header */}
+            <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '16px' }}>
+              <div
+                style={{
+                  width: '48px',
+                  height: '48px',
+                  borderRadius: '14px',
+                  background:
+                    selectedAthlete.gender === 'Lelaki'
+                      ? 'linear-gradient(135deg, #1e3a8a 0%, #3b82f6 100%)'
+                      : 'linear-gradient(135deg, #831843 0%, #ec4899 100%)',
+                  color: '#ffffff',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                }}
+              >
+                <User size={24} />
+              </div>
+              <div>
+                <h3 style={{ fontSize: '18px', fontWeight: 900, color: '#0f172a' }}>
+                  {selectedAthlete.name}
+                </h3>
+                <div style={{ fontSize: '12px', color: '#64748b', fontWeight: 600 }}>
+                  Rumah {selectedAthlete.houseName} {selectedAthlete.className ? `• ${selectedAthlete.className}` : ''} •{' '}
+                  {selectedAthlete.gender}
+                </div>
+              </div>
+            </div>
+
+            {/* Medals Summary Grid in Modal */}
+            <div
+              style={{
+                display: 'grid',
+                gridTemplateColumns: 'repeat(3, 1fr)',
+                gap: '8px',
+                background: '#f8fafc',
+                padding: '12px',
+                borderRadius: '12px',
+                marginBottom: '16px',
+                textAlign: 'center',
+              }}
+            >
+              <div>
+                <div style={{ fontSize: '11px', color: '#b45309', fontWeight: 800 }}>EMAS</div>
+                <div style={{ fontSize: '16px', fontWeight: 900, color: '#0f172a' }}>
+                  🥇 {selectedAthlete.gold}
+                </div>
+              </div>
+              <div>
+                <div style={{ fontSize: '11px', color: '#475569', fontWeight: 800 }}>PERAK</div>
+                <div style={{ fontSize: '16px', fontWeight: 900, color: '#0f172a' }}>
+                  🥈 {selectedAthlete.silver}
+                </div>
+              </div>
+              <div>
+                <div style={{ fontSize: '11px', color: '#b45309', fontWeight: 800 }}>GANGSA</div>
+                <div style={{ fontSize: '16px', fontWeight: 900, color: '#0f172a' }}>
+                  🥉 {selectedAthlete.bronze}
+                </div>
+              </div>
+            </div>
+
+            {/* Events List */}
+            <div style={{ marginBottom: '20px' }}>
+              <div style={{ fontSize: '12px', fontWeight: 800, color: '#475569', marginBottom: '8px' }}>
+                Pecahan Acara & Pencapaian ({selectedAthlete.eventsJoined.length})
+              </div>
+              <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
+                {selectedAthlete.eventsJoined.map((ev, i) => (
+                  <div
+                    key={i}
+                    style={{
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'space-between',
+                      padding: '10px 14px',
+                      background: '#ffffff',
+                      border: '1px solid #e2e8f0',
+                      borderRadius: '10px',
+                      fontSize: '12px',
+                    }}
+                  >
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                      <span style={{ fontSize: '16px' }}>
+                        {ev.place === 1 ? '🥇' : ev.place === 2 ? '🥈' : '🥉'}
+                      </span>
+                      <div>
+                        <div style={{ fontWeight: 800, color: '#0f172a' }}>{ev.eventName}</div>
+                        <div style={{ fontSize: '11px', color: '#64748b' }}>{ev.category}</div>
+                      </div>
+                    </div>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
+                      <span
+                        style={{
+                          fontSize: '10px',
+                          fontWeight: 800,
+                          padding: '2px 8px',
+                          borderRadius: '6px',
+                          background: ev.isGroup ? '#eef2ff' : '#eff6ff',
+                          color: ev.isGroup ? '#4338ca' : '#1d4ed8',
+                          border: `1px solid ${ev.isGroup ? '#c7d2fe' : '#bfdbfe'}`,
+                        }}
+                      >
+                        {ev.isGroup ? '👥 Acara Kumpulan' : '👤 Acara Individu'}
+                      </span>
+                      <span style={{ fontWeight: 900, color: '#16a34a', fontSize: '13px' }}>
+                        +{ev.points} pts
+                      </span>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            <button
+              type="button"
+              onClick={() => setSelectedAthlete(null)}
+              style={{
+                width: '100%',
+                padding: '10px',
+                background: '#235937',
+                color: '#ffffff',
+                border: 'none',
+                borderRadius: '12px',
+                fontSize: '13px',
+                fontWeight: 800,
+                cursor: 'pointer',
+              }}
+            >
+              Tutup
+            </button>
+          </div>
+        </div>
+      )}
     </div>
   )
 }
