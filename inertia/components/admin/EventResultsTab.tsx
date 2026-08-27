@@ -136,7 +136,9 @@ export const isGroupEvent = (eventName: string): boolean => {
     clean.includes('4 x') ||
     clean.includes('sukaneka') ||
     clean.includes('kumpulan') ||
-    clean.includes('relay')
+    clean.includes('relay') ||
+    clean.includes('perbarisan') ||
+    clean.includes('tercantik')
   )
 }
 
@@ -171,6 +173,8 @@ export default function EventResultsTab({
     '4x50 meter',
     '4x100 meter',
     '4x200 meter',
+    'Perbarisan',
+    'Rumah Sukan Tercantik',
   ]
 
   const isFieldEvent = (name: string) => {
@@ -180,6 +184,7 @@ export default function EventResultsTab({
 
   const getEventUnitPlaceholder = (name: string) => {
     const lower = name.toLowerCase()
+    if (lower.includes('perbarisan') || lower.includes('tercantik')) return '95.0 / 100 mata'
     if (lower.includes('tinggi')) return '1.25 m'
     if (lower.includes('jauh')) return '4.20 m'
     if (lower.includes('peluru')) return '7.50 m'

@@ -24,7 +24,9 @@ export default class ScoresController {
         event.eventName.toLowerCase().includes('4x') ||
         event.eventName.toLowerCase().includes('4 x') ||
         event.eventName.toLowerCase().includes('sukaneka') ||
-        event.eventName.toLowerCase().includes('kumpulan')
+        event.eventName.toLowerCase().includes('kumpulan') ||
+        event.eventName.toLowerCase().includes('perbarisan') ||
+        event.eventName.toLowerCase().includes('tercantik')
 
       // 2. Insert results
       for (const res of resultsData) {

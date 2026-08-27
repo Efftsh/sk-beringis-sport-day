@@ -11,6 +11,9 @@ test.group('Group Relay Events & House Scoring Logic (4x50m, 4x100m, 4x200m)', (
     assert.isTrue(isGroupEvent('4 x 200 M'))
     assert.isTrue(isGroupEvent('Sukaneka Kumpulan'))
     assert.isTrue(isGroupEvent('Acara Relay'))
+    assert.isTrue(isGroupEvent('Perbarisan'))
+    assert.isTrue(isGroupEvent('Rumah Sukan Tercantik'))
+    assert.isTrue(isGroupEvent('Rumah Sukan yang Tercantik'))
 
     // Individual events must not be identified as group events
     assert.isFalse(isGroupEvent('100 meter'))
@@ -243,5 +246,91 @@ test.group('Group Relay Events & House Scoring Logic (4x50m, 4x100m, 4x200m)', (
     assert.isAbove(faizIndex, 0, 'Relay-only gold medalist must rank below individual gold medalist')
     assert.equal(standings[faizIndex].individualGold, 0)
     assert.equal(standings[faizIndex].groupGold, 2)
+  })
+
+  test('contributes Perbarisan and Rumah Sukan Tercantik medals to house championship tally without affecting Anugerah Khas/Harapan', ({ assert }) => {
+    const specialHouseEvents = [
+      {
+        code: 'C08',
+        eventName: 'Perbarisan',
+        category: 'Antara Rumah Sukan',
+        stage: 'Akhir',
+        results: [
+          { place: 1, houseId: 'merah', points: 10, medal: 'gold' as const },
+          { place: 2, houseId: 'biru', points: 7, medal: 'silver' as const },
+          { place: 3, houseId: 'hijau', points: 5, medal: 'bronze' as const },
+        ],
+      },
+      {
+        code: 'C09',
+        eventName: 'Rumah Sukan Tercantik',
+        category: 'Antara Rumah Sukan',
+        stage: 'Akhir',
+        results: [
+          { place: 1, houseId: 'biru', points: 10, medal: 'gold' as const },
+          { place: 2, houseId: 'merah', points: 7, medal: 'silver' as const },
+          { place: 3, houseId: 'kuning', points: 5, medal: 'bronze' as const },
+        ],
+      },
+    ]
+
+    // 1. Verify House Medal Tally & Points calculation
+    const houseTallies: Record<string, { points: number; gold: number; silver: number; bronze: number }> = {
+      merah: { points: 0, gold: 0, silver: 0, bronze: 0 },
+      biru: { points: 0, gold: 0, silver: 0, bronze: 0 },
+      kuning: { points: 0, gold: 0, silver: 0, bronze: 0 },
+      hijau: { points: 0, gold: 0, silver: 0, bronze: 0 },
+    }
+
+    specialHouseEvents.forEach((ev) => {
+      ev.results.forEach((res) => {
+        houseTallies[res.houseId].points += res.points
+        if (res.place === 1) houseTallies[res.houseId].gold += 1
+        if (res.place === 2) houseTallies[res.houseId].silver += 1
+        if (res.place === 3) houseTallies[res.houseId].bronze += 1
+      })
+    })
+
+    // Merah: 1 Gold (Perbarisan) + 1 Silver (Tercantik) = 17 pts
+    assert.equal(houseTallies['merah'].gold, 1)
+    assert.equal(houseTallies['merah'].silver, 1)
+    assert.equal(houseTallies['merah'].points, 17)
+
+    // Biru: 1 Gold (Tercantik) + 1 Silver (Perbarisan) = 17 pts
+    assert.equal(houseTallies['biru'].gold, 1)
+    assert.equal(houseTallies['biru'].silver, 1)
+    assert.equal(houseTallies['biru'].points, 17)
+
+    // Hijau: 1 Bronze (Perbarisan) = 5 pts
+    assert.equal(houseTallies['hijau'].bronze, 1)
+    assert.equal(houseTallies['hijau'].points, 5)
+
+    // Kuning: 1 Bronze (Tercantik) = 5 pts
+    assert.equal(houseTallies['kuning'].bronze, 1)
+    assert.equal(houseTallies['kuning'].points, 5)
+
+    // 2. Verify athlete standings: Perbarisan & Rumah Sukan Tercantik MUST NOT assign medals to individual athletes
+    const registeredAthletes = [
+      {
+        id: 'ath-1',
+        name: 'Muhammad Danish',
+        class: '6 INOVATIF',
+        gender: 'Lelaki',
+        houseId: 'merah',
+        events: ['100 M [Individu - Utama]'],
+      },
+      {
+        id: 'ath-2',
+        name: 'Nur Aina',
+        class: '5 KREATIF',
+        gender: 'Perempuan',
+        houseId: 'biru',
+        events: ['200 M [Individu - Utama]'],
+      },
+    ]
+
+    const standings = calculateAthleteStandings(specialHouseEvents, registeredAthletes)
+    // No athlete should receive medals from whole-house competitions
+    assert.equal(standings.length, 0, 'No individual athletes should receive medals from whole-house competitions')
   })
 })

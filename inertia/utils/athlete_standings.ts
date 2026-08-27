@@ -128,7 +128,9 @@ export function isGroupEvent(eventName: string): boolean {
     clean.includes('kumpulan') ||
     clean.includes('relay') ||
     clean.includes('berganti') ||
-    clean.includes('tarik tali')
+    clean.includes('tarik tali') ||
+    clean.includes('perbarisan') ||
+    clean.includes('tercantik')
   )
 }
 
@@ -252,6 +254,12 @@ export function computeAthleteStandings(
     const evGender: 'Lelaki' | 'Perempuan' = isPerempuan ? 'Perempuan' : 'Lelaki'
 
     if (isGroup) {
+      // Whole-house events (Perbarisan, Rumah Sukan Tercantik) do not affect individual awards (Anugerah Khas / Harapan)
+      const isHouseOnlyEvent =
+        ev.eventName.toLowerCase().includes('perbarisan') ||
+        ev.eventName.toLowerCase().includes('tercantik')
+      if (isHouseOnlyEvent) return
+
       // ----------------------------------------------------
       // Group / Relay Event (e.g. 4x50m, 4x100m, 4x200m)
       // ----------------------------------------------------

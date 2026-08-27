@@ -1,6 +1,7 @@
 import { BaseSeeder } from '@adonisjs/lucid/seeders'
 import House from '#models/house'
 import Event from '#models/event'
+import EventResult from '#models/event_result'
 import Athlete from '#models/athlete'
 import User from '#models/user'
 import ExcelImporterService from '#services/excel_importer_service'
@@ -106,14 +107,6 @@ export default class extends BaseSeeder {
       { id: 'ev-03', code: 'A03', eventName: 'Lompat Jauh', category: 'Tahun 4 Perempuan', type: 'field' as const, stage: 'Akhir', status: 'pending' as const, scheduledTime: '07:30 AM (Hari 1)' },
       { id: 'ev-04', code: 'A04', eventName: 'Lompat Jauh', category: 'Tahun 4 Lelaki', type: 'field' as const, stage: 'Akhir', status: 'pending' as const, scheduledTime: '07:30 AM (Hari 1)' },
 
-      // 8.00 PAGI — Balapan: 200 Meter (Saringan)
-      { id: 'ev-11', code: 'A11', eventName: '200 meter', category: 'Tahun 4 Perempuan', type: 'track' as const, stage: 'Saringan', status: 'pending' as const, scheduledTime: '08:00 AM (Hari 1)' },
-      { id: 'ev-12', code: 'A12', eventName: '200 meter', category: 'Tahun 4 Lelaki', type: 'track' as const, stage: 'Saringan', status: 'pending' as const, scheduledTime: '08:00 AM (Hari 1)' },
-      { id: 'ev-13', code: 'A13', eventName: '200 meter', category: 'Tahun 5 Perempuan', type: 'track' as const, stage: 'Saringan', status: 'pending' as const, scheduledTime: '08:00 AM (Hari 1)' },
-      { id: 'ev-14', code: 'A14', eventName: '200 meter', category: 'Tahun 5 Lelaki', type: 'track' as const, stage: 'Saringan', status: 'pending' as const, scheduledTime: '08:00 AM (Hari 1)' },
-      { id: 'ev-15', code: 'A15', eventName: '200 meter', category: 'Tahun 6 Perempuan', type: 'track' as const, stage: 'Saringan', status: 'pending' as const, scheduledTime: '08:00 AM (Hari 1)' },
-      { id: 'ev-16', code: 'A16', eventName: '200 meter', category: 'Tahun 6 Lelaki', type: 'track' as const, stage: 'Saringan', status: 'pending' as const, scheduledTime: '08:00 AM (Hari 1)' },
-
       // 8.00 PAGI — Balapan: 200 Meter (Akhir)
       { id: 'ev-17', code: 'A17', eventName: '200 meter', category: 'Tahun 4 Perempuan', type: 'track' as const, stage: 'Akhir', status: 'pending' as const, scheduledTime: '08:30 AM (Hari 1)' },
       { id: 'ev-18', code: 'A18', eventName: '200 meter', category: 'Tahun 4 Lelaki', type: 'track' as const, stage: 'Akhir', status: 'pending' as const, scheduledTime: '08:30 AM (Hari 1)' },
@@ -181,7 +174,7 @@ export default class extends BaseSeeder {
 
       // ==========================================
       // 📅 HARI 3 — JUMAAT, 28 OGOS 2026 (7:30 AM)
-      // Padang SK Beringis (7 Acara Rasmi & Acara Kemuncak)
+      // Padang SK Beringis (9 Acara Rasmi & Acara Kemuncak)
       // ==========================================
 
       // 7.30 PAGI — Balapan: 4 x 200m Akhir (Tahun 4, 5, 6)
@@ -192,27 +185,28 @@ export default class extends BaseSeeder {
       { id: 'ev-61', code: 'C05', eventName: '4x200 meter', category: 'Tahun 6 Perempuan', type: 'track' as const, stage: 'Akhir', status: 'pending' as const, scheduledTime: '07:30 AM (Hari 3)' },
       { id: 'ev-62', code: 'C06', eventName: '4x200 meter', category: 'Tahun 6 Lelaki', type: 'track' as const, stage: 'Akhir', status: 'pending' as const, scheduledTime: '07:30 AM (Hari 3)' },
 
-      // 9.30 PAGI — Acara Perasmian, Penutupan & Relay Terbuka
-      { id: 'ev-63', code: 'C07', eventName: 'Relay Ibubapa/Guru', category: 'Terbuka', type: 'track' as const, stage: 'Akhir', status: 'pending' as const, scheduledTime: '09:30 AM (Hari 3)' },
+      // 8.30 PAGI — Acara Khas Antara Rumah Sukan (Perbarisan & Hiasan Rumah Sukan)
+      { id: 'ev-64', code: 'C08', eventName: 'Perbarisan', category: 'Antara Rumah Sukan', type: 'field' as const, stage: 'Akhir', status: 'pending' as const, scheduledTime: '08:30 AM (Hari 3)' },
+      { id: 'ev-65', code: 'C09', eventName: 'Rumah Sukan Tercantik', category: 'Antara Rumah Sukan', type: 'field' as const, stage: 'Akhir', status: 'pending' as const, scheduledTime: '09:00 AM (Hari 3)' },
     ]
 
-    // Remove any obsolete events not in the current official schedule
+    // Remove any obsolete events and their results not in the current official schedule
+    await EventResult.query().whereNotIn('eventId', eventsData.map((e) => e.id)).delete()
     await Event.query().whereNotIn('id', eventsData.map((e) => e.id)).delete()
 
     for (const ev of eventsData) {
-      const existing = await Event.find(ev.id)
-      if (!existing) {
-        await Event.create(ev)
-      } else {
-        await Event.query().where('id', ev.id).update({
+      await Event.updateOrCreate(
+        { id: ev.id },
+        {
+          id: ev.id,
           code: ev.code,
           eventName: ev.eventName,
           category: ev.category,
           type: ev.type,
           stage: ev.stage,
           scheduledTime: ev.scheduledTime,
-        })
-      }
+        }
+      )
     }
 
     // 3. Seed 293 Real SK Beringis Athletes

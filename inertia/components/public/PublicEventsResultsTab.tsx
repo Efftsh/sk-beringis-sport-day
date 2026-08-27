@@ -66,15 +66,17 @@ export function getEventDay(eventName: string, _stage: string, category: string,
 
   // Hari 3: Jumaat, 28 Ogos 2026
   // - 4x200m (Akhir) Tahun 4, 5, 6
-  // - Relay Terbuka Ibubapa/Guru
-  // - Perbarisan & Majlis Penutupan
+  // - Perbarisan & Rumah Sukan Tercantik
+  // - Relay Terbuka Ibubapa/Guru & Majlis Penutupan
   if (
     name.includes('4x200') ||
     name.includes('4 x 200') ||
     name.includes('relay') ||
     name.includes('ibubapa') ||
     name.includes('guru') ||
-    name.includes('terbuka')
+    name.includes('terbuka') ||
+    name.includes('perbarisan') ||
+    name.includes('tercantik')
   ) {
     return 3
   }
