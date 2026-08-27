@@ -6,7 +6,7 @@ import Athlete from '#models/athlete'
 export default class HomeController {
   async index({ inertia }: HttpContext) {
     const championshipInfo = {
-      title: 'Kejohanan Olahraga & Sukaneka Tahunan',
+      title: 'Kejohanan Sukan Tahunan Sk Beringis Papar',
       schoolName: 'SK Beringis, Papar',
       edition: 'Kali Ke-27 (2026)',
       dates: '26 - 28 Ogos 2026',
